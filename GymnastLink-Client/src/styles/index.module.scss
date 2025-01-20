@@ -1,0 +1,31 @@
+@import '@fontsource/cairo/index.css';
+
+html,
+body {
+  direction: ltr;
+  padding: 0;
+  margin: 0;
+  font-family: 'Cairo', Calibri, sans-serif;
+  background-image: linear-gradient(135deg, #00288D 0%, #705DB5 100%);
+  background-attachment: fixed;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(83, 80, 165);
+  border-radius: 10px;
+  margin-block: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(36, 35, 100, 0.822);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(189, 189, 189, 0.486);
+}
