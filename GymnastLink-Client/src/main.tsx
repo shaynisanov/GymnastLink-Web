@@ -6,10 +6,10 @@ import Login from '@pages/Login';
 import Profile from '@pages/Profile';
 import Updates from '@pages/Updates';
 import Workouts from '@pages/Workouts';
-import Layout from '@components/Layout';
+import {Layout} from '@components/Layout';
 import {ClientRoutes} from '@enums/clientRoutes';
+import '@styles/index.module.scss';
 import {theme} from './Theme';
-import './styles/index.module.scss';
 
 const isAuthenticated = true; // TODO: Replace with authentication logic
 
@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={isAuthenticated ? <Navigate to={ClientRoutes.UPDATES} /> : <Login />} />
           <Route path="/" element={<Layout />}>
-            <Route path={ClientRoutes.UPDATES} element={<Updates />} />
+            <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
             <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
             <Route path={ClientRoutes.PROFILE} element={<Profile />} />
           </Route>

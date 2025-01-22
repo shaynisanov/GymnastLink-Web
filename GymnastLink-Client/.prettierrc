@@ -15,6 +15,7 @@
     "^@customTypes/(.*)$",
     "^@enums/(.*)$",
     "^@utils/(.*)$",
+    "^@styles/(.*)$",
     "^[./]"
   ],
   "importOrderSortSpecifiers": true

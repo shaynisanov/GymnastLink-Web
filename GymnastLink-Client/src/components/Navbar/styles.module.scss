@@ -1,18 +1,16 @@
+@use "../../styles/palette.module";
+
 .container {
   display: flex;
   align-items: center;
   gap: 32px;
   padding: 16px;
-
-  background: rgba(255, 255, 255, 0.192);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(4.5px);
-  -webkit-backdrop-filter: blur(4.5px);
-  border: 1px solid rgba(255, 255, 255, 0.192);
+  border-top: unset;
+  border-right: unset;
+  border-left: unset;
 
   .title {
     color: white;
-    font-size: 1.5rem;
     font-weight: 400;
     text-decoration: unset;
   }
@@ -22,8 +20,7 @@
     gap: 16px;
 
     .pageText {
-      color: white;
-      font-size: 1rem;
+      color: palette.$fontColor;
       text-decoration: transparent;
 
       &:hover {
