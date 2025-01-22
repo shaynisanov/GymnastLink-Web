@@ -1,0 +1,22 @@
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "bracketSpacing": false,
+  "printWidth": 120,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "^@mui/(.*)$",
+    "^@pages/(.*)$",
+    "^@components/(.*)$",
+    "^@customTypes/(.*)$",
+    "^@enums/(.*)$",
+    "^@utils/(.*)$",
+    "^@styles/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSortSpecifiers": true
+}
