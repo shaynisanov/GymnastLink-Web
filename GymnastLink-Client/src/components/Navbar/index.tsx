@@ -1,8 +1,8 @@
 import {FC} from 'react';
 import {Link, useLocation} from 'react-router';
 import {Typography} from '@mui/joy';
+import {MenuItem} from '@customTypes/menuItem';
 import {ClientRoutes} from '@enums/clientRoutes';
-import {MenuItem} from '../../types/menuItem';
 import styles from './styles.module.scss';
 
 const pages: MenuItem[] = [
@@ -31,9 +31,11 @@ const NavBar: FC = () => {
       </Typography>
       <div className={styles.linksContainer}>
         {pages.map((page) => (
-          <Link key={page.route}
-                to={page.route}
-                className={currentRoute === page.route ? styles.activePageText : styles.pageText}>
+          <Link
+            key={page.route}
+            to={page.route}
+            className={currentRoute === page.route ? styles.activePageText : styles.pageText}
+          >
             <Typography className={currentRoute === page.route ? styles.activePageText : styles.pageText}>
               {page.text}
             </Typography>

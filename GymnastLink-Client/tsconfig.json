@@ -6,6 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "plugins": [
+      "@trivago/prettier-plugin-sort-imports"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -32,13 +35,13 @@
       "@utils/*": [
         "src/utils/*"
       ],
-      "@hooks/*": [
-        "src/hooks/*"
+      "@services/*": [
+        "src/services/*"
       ],
       "@enums/*": [
         "src/enums/*"
       ],
-      "@types/*": [
+      "@customTypes/*": [
         "src/types/*"
       ]
     }

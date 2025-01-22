@@ -1,8 +1,6 @@
 import {FC} from 'react';
 
 const Profile: FC = () => {
-  return (
-    <div></div>
-  );
+  return <div></div>;
 };
 export default Profile;

@@ -2,11 +2,11 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router';
 import {CssBaseline, ThemeProvider} from '@mui/joy';
-import Layout from '@components/Layout';
+import Login from '@pages/Login';
+import Profile from '@pages/Profile';
 import Updates from '@pages/Updates';
 import Workouts from '@pages/Workouts';
-import Profile from '@pages/Profile';
-import Login from '@pages/Login';
+import Layout from '@components/Layout';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {theme} from './Theme';
 import './styles/index.module.scss';
@@ -28,5 +28,5 @@ createRoot(document.getElementById('root')!).render(
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode>
 );

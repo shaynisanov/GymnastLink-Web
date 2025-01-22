@@ -4,5 +4,18 @@
   "trailingComma": "es5",
   "tabWidth": 2,
   "bracketSpacing": false,
-    "printWidth": 120
+  "printWidth": 120,
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "^@mui/(.*)$",
+    "^@pages/(.*)$",
+    "^@components/(.*)$",
+    "^@customTypes/(.*)$",
+    "^@enums/(.*)$",
+    "^@utils/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSortSpecifiers": true
 }

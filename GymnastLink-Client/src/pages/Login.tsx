@@ -1,9 +1,7 @@
 import {FC} from 'react';
 
 const Login: FC = () => {
-  return (
-    <div></div>
-  );
+  return <div></div>;
 };
 
 export default Login;
