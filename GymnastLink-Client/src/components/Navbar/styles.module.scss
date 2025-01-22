@@ -5,9 +5,7 @@
   align-items: center;
   gap: 32px;
   padding: 16px;
-  border-top: unset;
-  border-right: unset;
-  border-left: unset;
+  border: unset !important;
 
   .title {
     color: white;

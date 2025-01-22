@@ -1,11 +1,14 @@
 import {Avatar, AvatarProps, styled} from '@mui/joy';
 
-interface Props extends AvatarProps {
+interface Props extends Omit<AvatarProps, 'size'> {
   userName: string;
   image?: string;
+  sizeLg?: true;
 }
 
-const UserAvatar = styled(({userName, image, ...props}: Props) => <Avatar alt={userName} src={image} {...props} />)({
+const UserAvatar = styled(({userName, image, sizeLg, ...props}: Props) => (
+  <Avatar size={sizeLg ? 'lg' : undefined} alt={userName} src={image} {...props} />
+))({
   width: 45,
   height: 45,
   '&.MuiAvatar-sizeLg': {
