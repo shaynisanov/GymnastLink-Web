@@ -10,9 +10,11 @@
   ],
   "importOrder": [
     "^@mui/(.*)$",
+    "^@assets(.*)$",
     "^@pages/(.*)$",
     "^@components/(.*)$",
     "^@customTypes/(.*)$",
+    "^@contexts/(.*)$",
     "^@enums/(.*)$",
     "^@utils/(.*)$",
     "^@styles/(.*)$",

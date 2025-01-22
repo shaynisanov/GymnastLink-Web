@@ -1,5 +1,6 @@
 import express, {Express} from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 import {json, urlencoded} from 'body-parser';
 import {postRouter} from './routes/postsRoutes';
 import {commentRouter} from './routes/commentsRoutes';
@@ -14,11 +15,12 @@ db.once('open', () => console.log('Connected to GymnastLink database'));
 db.on('error', (error) => console.error(error));
 
 app.use(json());
+app.use(cors());
 app.use(urlencoded({extended: true}));
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/users', userRouter);
- 
+
 setupSwagger(app);
 
 const initializeExpress = () =>

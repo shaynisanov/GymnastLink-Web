@@ -21,11 +21,15 @@ const register = async (req: Request, res: Response) => {
       return;
     }
 
-    const user = await userModel.create({
+    const userName = req.body.email.split('@')[0];
+
+    await userModel.create({
       email: req.body.email,
       password: hashedPassword,
+      userName,
     });
-    res.status(200).send(user);
+
+    res.status(200);
   } catch (err) {
     res.status(400).send(err);
   }
@@ -96,6 +100,7 @@ const login = async (req: Request, res: Response) => {
     await user.save();
 
     res.status(200).send({
+      userName: user.userName,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
       _id: user._id,
@@ -119,6 +124,18 @@ const getUserByJwtToken = async (token?: string) => {
     return await userModel.findById(jwtPayload._id);
   } catch (err) {
     return null;
+  }
+};
+
+const getUserData = async (
+  req: RequestWithUserId,
+  res: Response
+): Promise<void> => {
+  try {
+    const user = await userModel.findById(req.body.userId);
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(400).json({error: INTERNAL_ERROR});
   }
 };
 
@@ -227,4 +244,4 @@ const authMiddleware = async (
   } else res.status(401).send(ACCESS_DENIED);
 };
 
-export {register, login, logout, refreshUserToken, authMiddleware};
+export {register, login, logout, getUserData, refreshUserToken, authMiddleware};

@@ -43,6 +43,12 @@
       ],
       "@customTypes/*": [
         "src/types/*"
+      ],
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@contexts/*": [
+        "src/contexts/*"
       ]
     }
   },

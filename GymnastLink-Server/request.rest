@@ -31,6 +31,11 @@ Content-Type: application/json
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzY5ZDQ1ZDMxMzBiODUwOGQwZjFlYmMiLCJyYW5kb20iOiIwLjk0OTkyNjQ0NTE2ODk0OTgiLCJpYXQiOjE3MzQ5ODk1NDYsImV4cCI6MTczNTU5NDM0Nn0._BAEqV-gMJKw1qf1JYQMTX2qHDJMQAxkh4CdzHXemKw"
 }
 
+### get user data
+
+GET http://localhost:3000/users/user-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkxNDgwODRjNTZkZTg3M2VlMGRhZmEiLCJyYW5kb20iOiIwLjEzODY1NTIyMjExNjk0MDYiLCJpYXQiOjE3Mzc1NzQ0MjYsImV4cCI6MTczNzU3NTAyNn0.-V_zDZjuKvUPGMWdIl5bcPMs_FKkxx4RKg9wyppY5Wo
+
 ### get all posts
 
 GET http://localhost:3000/posts

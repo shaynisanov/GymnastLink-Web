@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .actionsContainer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: space-between;
+
+    .loginRegister {
+      display: flex;
+      gap: 8px;
+    }
+  }
+}

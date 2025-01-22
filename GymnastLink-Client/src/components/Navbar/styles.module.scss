@@ -2,36 +2,41 @@
 
 .container {
   display: flex;
-  align-items: center;
-  gap: 32px;
+  justify-content: space-between;
   padding: 16px;
   border: unset !important;
 
-  .title {
-    color: white;
-    font-weight: 400;
-    text-decoration: unset;
-  }
-
-  .linksContainer {
+  .logoAndLinks {
     display: flex;
-    gap: 16px;
+    gap: 32px;
+    align-items: center;
 
-    .pageText {
-      color: palette.$fontColor;
-      text-decoration: transparent;
+    .linksContainer {
+      display: flex;
+      gap: 16px;
 
-      &:hover {
+      .pageText {
+        color: palette.$fontColor;
+        text-decoration: transparent;
+
+        &:hover {
+          font-weight: 700;
+        }
+      }
+
+      .activePageText {
+        @extend .pageText;
         font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 1.3px;
+        text-underline-offset: 3px;
       }
     }
+  }
 
-    .activePageText {
-      @extend .pageText;
-      font-weight: 700;
-      text-decoration: underline;
-      text-decoration-thickness: 1.3px;
-      text-underline-offset: 3px;
-    }
+  .userPreview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 }
