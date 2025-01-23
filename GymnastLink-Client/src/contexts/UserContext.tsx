@@ -1,4 +1,4 @@
-import {getCurrentUserData} from '@services/api';
+import {getCurrentUserData} from '@services/authApi';
 import Cookies from 'js-cookie';
 import {FC, PropsWithChildren, createContext, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import {ServerRoutes} from '@enums/serverRoutes';
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -11,7 +12,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get('access_token');
 
-    if (accessToken && config.url !== '/users/logout') {
+    if (accessToken && config.url !== `/${ServerRoutes.AUTH}/logout`) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
@@ -35,10 +36,11 @@ axiosInstance.interceptors.response.use(
 
       if (refreshToken) {
         try {
-          const response = await axios.post(`${BASE_URL}/users/refresh-token`, {refreshToken});
+          const response = await axios.post(`${BASE_URL}/${ServerRoutes.AUTH}/refresh-token`, {refreshToken});
 
           const newAccessToken = response.data.accessToken;
           Cookies.set('access_token', newAccessToken);
+          Cookies.set('refresh_token', response.data.refreshToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
           return axios(originalRequest);

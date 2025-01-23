@@ -4,6 +4,7 @@ import {Typography} from '@mui/joy';
 import {menuItems} from '@components/Navbar/menuItems';
 import {UserAvatar} from '@components/ProfileImage';
 import {useUserContext} from '@contexts/UserContext';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {glassEffect} from '@styles/commonStyles';
 import styles from './styles.module.scss';
 
@@ -15,7 +16,7 @@ const NavBar: FC = () => {
   return (
     <div style={glassEffect} className={styles.container}>
       <div className={styles.logoAndLinks}>
-        <Link to="/" className={styles.logo}>
+        <Link to={ClientRoutes.UPDATES} className={styles.logo}>
           <Typography level="h2">GymnastLink</Typography>
         </Link>
         <div className={styles.linksContainer}>

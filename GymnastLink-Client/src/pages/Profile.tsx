@@ -1,4 +1,4 @@
-import {userLogout} from '@services/api';
+import {userLogout} from '@services/authApi';
 import {FC, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';

@@ -1,5 +1,5 @@
 import {yupResolver} from '@hookform/resolvers/yup';
-import {registerUser, userLogin} from '@services/api';
+import {registerUser, userLogin} from '@services/authApi';
 import {AxiosError} from 'axios';
 import {FC, useState} from 'react';
 import {useForm} from 'react-hook-form';
