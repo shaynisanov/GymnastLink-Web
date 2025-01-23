@@ -42,8 +42,8 @@ const router = Router();
  *                   example: John Doe
  *                 profileImage:
  *                   type: string
- *                   description: The user's profile image URL
- *                   example: http://example.com/image.jpg
+ *                   description: The user's profile image in base64 format
+ *                   example: iVBORw0KGgoAASUhEUgAA...
  *       404:
  *         description: User not found
  *       400:

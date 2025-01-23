@@ -36,6 +36,7 @@ const router = Router();
  *       required:
  *         - email
  *         - password
+ *         - userName
  *       properties:
  *         email:
  *           type: string
@@ -43,9 +44,17 @@ const router = Router();
  *         password:
  *           type: string
  *           description: The user password
+ *         userName:
+ *           type: string
+ *           description: The user's name
+ *         profileImage:
+ *           type: string
+ *           description: The user's profile image in base64 format
  *       example:
  *         email: 'bob@gmail.com'
  *         password: '123456'
+ *         userName: 'Bob'
+ *         profileImage: 'iVBORw0KGgoAASUhEUgAA...'
  */
 
 /**
@@ -71,10 +80,10 @@ const router = Router();
 
 /**
  * @swagger
- * /users/register:
+ * /auth/register:
  *   post:
  *     summary: registers a new user
- *     tags: [User]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -93,11 +102,11 @@ router.post('/register', register);
 
 /**
  * @swagger
- * /users/login:
+ * /auth/login:
  *   post:
  *     summary: User login
  *     description: Authenticate user and return tokens
- *     tags: [User]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -120,11 +129,11 @@ router.post('/login', login);
 
 /**
  * @swagger
- * /users/logout:
+ * /auth/logout:
  *   post:
  *     summary: User logout
  *     description: Logout user and invalidate the refresh token
- *     tags: [User]
+ *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -149,11 +158,11 @@ router.post('/logout', logout);
 
 /**
  * @swagger
- * /users/refresh-token:
+ * /auth/refresh-token:
  *   post:
  *     summary: Refresh tokens
  *     description: Refresh access and refresh tokens using the provided refresh token
- *     tags: [User]
+ *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -189,11 +198,11 @@ router.post('/refresh-token', refreshUserToken);
 
 /**
  * @swagger
- * /users/user-data:
+ * /auth/user-data:
  *   get:
  *     summary: Get current user data
  *     description: Retrieve user data using the access token
- *     tags: [User]
+ *     tags: [Auth]
  *     security:
  *       - bearerAuth: []
  *     responses:
