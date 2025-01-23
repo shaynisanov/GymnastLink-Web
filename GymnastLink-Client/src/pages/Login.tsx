@@ -16,7 +16,6 @@ const Login: FC = () => {
 
   useEffect(() => {
     if (token) {
-      console.log('here');
       if (!user) {
         getUserData().then((userData) => {
           setUser(userData);

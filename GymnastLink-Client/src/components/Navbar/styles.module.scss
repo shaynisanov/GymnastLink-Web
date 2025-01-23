@@ -8,8 +8,23 @@
 
   .logoAndLinks {
     display: flex;
-    gap: 32px;
+    gap: 24px;
     align-items: center;
+
+    .logo {
+      text-decoration: unset;
+      padding: 4px;
+      transition: background-color 0.2s;
+      border-radius: 8px;
+
+      &:hover {
+        > h2 {
+          color: #00288D;
+        }
+
+        background-color: palette.$fontColor;
+      }
+    }
 
     .linksContainer {
       display: flex;
@@ -20,7 +35,9 @@
         text-decoration: transparent;
 
         &:hover {
-          font-weight: 700;
+          > p {
+            font-weight: 700;
+          }
         }
       }
 

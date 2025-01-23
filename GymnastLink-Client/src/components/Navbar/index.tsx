@@ -15,7 +15,9 @@ const NavBar: FC = () => {
   return (
     <div style={glassEffect} className={styles.container}>
       <div className={styles.logoAndLinks}>
-        <Typography level="h2">GymnastLink</Typography>
+        <Link to="/" className={styles.logo}>
+          <Typography level="h2">GymnastLink</Typography>
+        </Link>
         <div className={styles.linksContainer}>
           {menuItems.map((item) => (
             <Link
@@ -23,12 +25,7 @@ const NavBar: FC = () => {
               to={item.route}
               className={currentRoute === item.route ? styles.activePageText : styles.pageText}
             >
-              <Typography
-                level="body-lg"
-                className={currentRoute === item.route ? styles.activePageText : styles.pageText}
-              >
-                {item.text}
-              </Typography>
+              <Typography level="body-lg">{item.text}</Typography>
             </Link>
           ))}
         </div>

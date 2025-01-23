@@ -3,8 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import {UserLoginForm} from '@components/LoginForm/form';
 import {LoggedUser} from '@customTypes/User';
+import {parseExpirationInDays} from '@utils/dateUtils';
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
+const JWT_TOKEN_EXPIRES = import.meta.env.VITE_JWT_TOKEN_EXPIRES;
 
 const registerUser = async (loginForm: UserLoginForm) => {
   const response = await axios.post<LoggedUser>(`${BASE_URL}/users/register`, loginForm);
@@ -14,7 +16,7 @@ const registerUser = async (loginForm: UserLoginForm) => {
 
 const userLogin = async (loginForm: UserLoginForm) => {
   const response = await axios.post<LoggedUser>(`${BASE_URL}/users/login`, loginForm);
-  Cookies.set('access_token', response.data.accessToken, {expires: 7});
+  Cookies.set('access_token', response.data.accessToken, {expires: parseExpirationInDays(JWT_TOKEN_EXPIRES)});
   Cookies.set('refresh_token', response.data.refreshToken);
 
   return response.data;
