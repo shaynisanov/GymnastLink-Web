@@ -7,6 +7,7 @@ import {commentRouter} from './routes/commentsRoutes';
 import {userRouter} from './routes/usersRoutes';
 import 'dotenv/config';
 import {setupSwagger} from './swaggerConfig';
+import {authRouter} from './routes/authRoutes';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use(urlencoded({extended: true}));
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
+app.use('/auth', authRouter);
 app.use('/users', userRouter);
 
 setupSwagger(app);

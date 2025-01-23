@@ -1,6 +1,6 @@
 ### register user
 
-POST http://localhost:3000/users/register
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### login user
 
-POST http://localhost:3000/users/login
+POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
@@ -20,11 +20,11 @@ Content-Type: application/json
 
 ### logout user
 
-POST http://localhost:3000/users/logout
+POST http://localhost:3000/auth/logout
 
 ### refresh user token
 
-POST http://localhost:3000/users/refresh-token
+POST http://localhost:3000/auth/refresh-token
 Content-Type: application/json
 
 {
@@ -33,8 +33,13 @@ Content-Type: application/json
 
 ### get user data
 
-GET http://localhost:3000/users/user-data
+GET http://localhost:3000/auth/user-data
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkxNDgwODRjNTZkZTg3M2VlMGRhZmEiLCJyYW5kb20iOiIwLjEzODY1NTIyMjExNjk0MDYiLCJpYXQiOjE3Mzc1NzQ0MjYsImV4cCI6MTczNzU3NTAyNn0.-V_zDZjuKvUPGMWdIl5bcPMs_FKkxx4RKg9wyppY5Wo
+
+### get user by id
+
+GET http://localhost:3000/users/679148084c56de873ee0dafa
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzkxNDgwODRjNTZkZTg3M2VlMGRhZmEiLCJyYW5kb20iOiIwLjA4MTQzMTc1NDQzMzM0NjI3IiwiaWF0IjoxNzM3NjUxMTk5LCJleHAiOjE3Mzc2NTE3OTl9.SzV6WNEnAeWI2S4LtUb6Ut6EnpyvqBB_DIYiRsHA5YY
 
 ### get all posts
 
