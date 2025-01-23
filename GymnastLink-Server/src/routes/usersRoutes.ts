@@ -49,6 +49,10 @@ const router = Router();
  *       400:
  *         description: Bad request
  */
-router.get('/:id', authMiddleware, usersController.getUserById);
+router.get(
+  '/:id',
+  authMiddleware,
+  usersController.getUserById.bind(usersController)
+);
 
 export {router as userRouter};
