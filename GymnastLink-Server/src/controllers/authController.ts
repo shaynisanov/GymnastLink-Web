@@ -29,7 +29,7 @@ const register = async (req: Request, res: Response) => {
       userName,
     });
 
-    res.status(200);
+    res.status(200).send('User registered successfully');
   } catch (err) {
     res.status(400).send(err);
   }

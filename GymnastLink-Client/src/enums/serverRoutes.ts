@@ -1,7 +1,8 @@
 enum ServerRoutes {
-  USER = 'users',
+  USERS = 'users',
   POSTS = 'posts',
   COMMENTS = 'comments',
+  WORKOUTS = 'workouts',
   AUTH = 'auth',
 }
 
