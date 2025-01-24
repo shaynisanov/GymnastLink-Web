@@ -9,7 +9,7 @@ import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
-import {createNewPost, getAllPosts, updatePost} from '@services/postsApi';
+import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/updates.module.scss';
 
 const Updates: FC = () => {
@@ -56,6 +56,16 @@ const Updates: FC = () => {
     }
   };
 
+  const handleDeletePost = async (postId: string) => {
+    try {
+      await deletePost(postId);
+      setPosts((prevState) => prevState.filter(({_id}) => _id !== postId));
+      toast.success('Post was successfully deleted');
+    } catch (e) {
+      toast.error("We couldn't delete your post");
+    }
+  };
+
   const onEditPostClick = (post: Post) => {
     setEditedPost(post);
   };
@@ -68,7 +78,12 @@ const Updates: FC = () => {
     <Grid container spacing="32px" className={styles.container}>
       <Grid xs={7} className={styles.gridItem}>
         <Typography level="h2">Whats new</Typography>
-        <PostList posts={posts} showLoading={showPostLoading} onEditClick={onEditPostClick} />
+        <PostList
+          posts={posts}
+          showLoading={showPostLoading}
+          onEditClick={onEditPostClick}
+          onDeleteClick={handleDeletePost}
+        />
       </Grid>
       <Grid xs={5} className={styles.gridItem}>
         <Typography level="h2">New Post</Typography>

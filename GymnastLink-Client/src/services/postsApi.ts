@@ -26,4 +26,8 @@ const updatePost = async (postId: string, editedPost: PostRequest) => {
   return response.data;
 };
 
-export {getAllPosts, getPostById, createNewPost, updatePost};
+const deletePost = async (postId: string) => {
+  await axiosInstance.delete(`/${ServerRoutes.POSTS}/${postId}`);
+};
+
+export {getAllPosts, getPostById, createNewPost, updatePost, deletePost};
