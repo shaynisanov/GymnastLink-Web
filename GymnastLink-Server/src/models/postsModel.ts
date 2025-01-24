@@ -1,20 +1,25 @@
 import {model, Schema, Types} from 'mongoose';
 
 interface IPost {
-  title: string;
   content: string;
+  image?: string;
   userId: Types.ObjectId;
+  createdTime: string;
 }
 
 const postSchema = new Schema<IPost>({
-  title: {
+  content: {
     type: String,
     required: true,
   },
-  content: String,
+  image: String,
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'Users',
+    required: true,
+  },
+  createdTime: {
+    type: String,
     required: true,
   },
 });
