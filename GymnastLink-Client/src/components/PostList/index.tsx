@@ -1,3 +1,4 @@
+import {compareDesc} from 'date-fns';
 import {FC} from 'react';
 import {PostItem} from '@components/PostItem';
 import {PostItemSkeleton} from '@components/PostItem/PostItemSkeleton';
@@ -13,7 +14,9 @@ const PostList: FC<Props> = ({posts, showLoading}) => (
   <div className={styles.container}>
     {showLoading
       ? Array.from({length: 5}).map((_, index) => <PostItemSkeleton key={index} />)
-      : posts?.map((post) => <PostItem post={post} key={post._id} />)}
+      : posts
+          ?.sort((a, b) => compareDesc(a.createdTime, b.createdTime))
+          .map((post) => <PostItem post={post} key={post._id} />)}
   </div>
 );
 
