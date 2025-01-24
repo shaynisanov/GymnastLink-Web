@@ -1,9 +1,10 @@
-import {memo} from 'react';
+import {memo, useCallback} from 'react';
 import {ChatBubbleOutlineRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
-import {IconButton, Typography} from '@mui/joy';
+import {Typography} from '@mui/joy';
 import {PostUserSkeleton} from '@components/PostItem/PostItemSkeleton/PostUserSkeleton';
 import {UserAvatar} from '@components/ProfileImage';
 import {ContentCard} from '@components/common/ContentCard';
+import {StyledIconButton} from '@components/common/StyledIconButton';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
@@ -13,16 +14,21 @@ import styles from './styles.module.scss';
 
 interface Props {
   post: Post;
+  onEditClick: (post: Post) => void;
 }
 
-const PostItem = memo<Props>(({post}) => {
+const PostItem = memo<Props>(({post, onEditClick}) => {
   const {user} = useUserContext();
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
+
+  const onEditButtonClick = useCallback(() => {
+    onEditClick(post);
+  }, [post, onEditClick]);
 
   return (
     <ContentCard>
       <div className={styles.container}>
-        <div className={styles.detailsContent}>
+        <div className={post.image ? styles.detailsContentWithImage : styles.detailsContent}>
           {isFetchingUser || !creatingUser ? (
             <PostUserSkeleton />
           ) : (
@@ -42,22 +48,22 @@ const PostItem = memo<Props>(({post}) => {
             </Typography>
           </div>
           <div className={styles.actions}>
-            <IconButton className={styles.actionButton}>
+            <StyledIconButton>
               <FavoriteBorderRounded />
               <Typography level="body-md">0</Typography>
-            </IconButton>
-            <IconButton className={styles.actionButton}>
+            </StyledIconButton>
+            <StyledIconButton>
               <ChatBubbleOutlineRounded />
               <Typography level="body-md">0</Typography>
-            </IconButton>
+            </StyledIconButton>
             {user?._id === post.userId && (
-              <IconButton className={styles.actionButton}>
+              <StyledIconButton onClick={onEditButtonClick}>
                 <EditNoteRounded />
-              </IconButton>
+              </StyledIconButton>
             )}
           </div>
         </div>
-        {post.image && (
+        {!!post.image && post.image.length > 0 && (
           <div className={styles.postImage}>
             <img src={post.image} alt="post" />
           </div>

@@ -1,28 +1,29 @@
-import {AxiosError} from 'axios';
-import {FC, useEffect, useState} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {Grid, Typography} from '@mui/joy';
 import {PostForm} from '@components/PostForm';
 import {PostDetailsForm} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
+import {Popup} from '@components/common/Popup';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
-import {createNewPost, getAllPosts} from '@services/postsApi';
+import {createNewPost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/updates.module.scss';
 
 const Updates: FC = () => {
   const {user} = useUserContext();
   const {data: initialPosts = [], isFetching} = useFetch(getAllPosts);
   const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [editedPost, setEditedPost] = useState<Post>();
   const showPostLoading = useLoadingWithDelay(isFetching);
 
   useEffect(() => {
     setPosts(initialPosts);
   }, [initialPosts]);
 
-  const handleSubmitPost = async (postDetailsForm: PostDetailsForm) => {
+  const handleCreatePost = async (postDetailsForm: PostDetailsForm) => {
     if (user) {
       try {
         const newPost = await createNewPost({
@@ -33,21 +34,49 @@ const Updates: FC = () => {
         setPosts((prevState) => [newPost, ...prevState]);
         toast.success('Your new post was added');
       } catch (e) {
-        toast.error(`Error registering user: ${(e as AxiosError)?.response?.data}`);
+        toast.error("We couldn't add your new post");
       }
     }
   };
+
+  const handleEditPost = async (postDetailsForm: PostDetailsForm) => {
+    if (user && editedPost) {
+      try {
+        const updatedPost = await updatePost(editedPost._id, {
+          ...postDetailsForm,
+          userId: user?._id,
+          createdTime: new Date().toISOString(),
+        });
+        setPosts((prevState) => [updatedPost, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
+        setEditedPost(undefined);
+        toast.success('Post was successfully updated');
+      } catch (e) {
+        toast.error("We couldn't update your post");
+      }
+    }
+  };
+
+  const onEditPostClick = (post: Post) => {
+    setEditedPost(post);
+  };
+
+  const onCancelEditPost = useCallback(() => {
+    setEditedPost(undefined);
+  }, [setEditedPost]);
 
   return (
     <Grid container spacing="32px" className={styles.container}>
       <Grid xs={7} className={styles.gridItem}>
         <Typography level="h2">Whats new</Typography>
-        <PostList posts={posts} showLoading={showPostLoading} />
+        <PostList posts={posts} showLoading={showPostLoading} onEditClick={onEditPostClick} />
       </Grid>
       <Grid xs={5} className={styles.gridItem}>
         <Typography level="h2">New Post</Typography>
-        <PostForm handleSubmitPost={handleSubmitPost} />
+        <PostForm handleSubmitPost={handleCreatePost} submitText="Share" />
       </Grid>
+      <Popup open={!!editedPost} title="Update Post" onCancel={onCancelEditPost}>
+        <PostForm handleSubmitPost={handleEditPost} post={editedPost} submitText="Update" />
+      </Popup>
     </Grid>
   );
 };

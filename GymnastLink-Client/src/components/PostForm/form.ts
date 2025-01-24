@@ -12,5 +12,9 @@ const postSchema = yup
   })
   .required();
 
+const postInitialValues: PostDetailsForm = {
+  content: '',
+};
+
 export type {PostDetailsForm};
-export {postSchema};
+export {postSchema, postInitialValues};

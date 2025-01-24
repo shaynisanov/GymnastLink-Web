@@ -1,21 +1,26 @@
 import {ChangeEvent, FC, useCallback, useRef} from 'react';
 import {useForm} from 'react-hook-form';
 import {AddRounded, AttachFileRounded, DeleteRounded} from '@mui/icons-material';
-import {IconButton, Typography} from '@mui/joy';
-import {PostDetailsForm, postSchema} from '@components/PostForm/form';
+import {Typography} from '@mui/joy';
+import {PostDetailsForm, postInitialValues, postSchema} from '@components/PostForm/form';
 import {UserAvatar} from '@components/ProfileImage';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
+import {StyledIconButton} from '@components/common/StyledIconButton';
 import {StyledTextArea} from '@components/common/input/StyledTextArea';
+import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {yupResolver} from '@hookform/resolvers/yup';
 import styles from './styles.module.scss';
 
 interface Props {
+  submitText: string;
+  post?: Post;
+
   handleSubmitPost(newPostForm: PostDetailsForm): Promise<void>;
 }
 
-const PostForm: FC<Props> = ({handleSubmitPost}) => {
+const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
   const {
     handleSubmit,
     register,
@@ -23,13 +28,13 @@ const PostForm: FC<Props> = ({handleSubmitPost}) => {
     watch,
     setValue,
     formState: {isValid},
-  } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema)});
+  } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema), defaultValues: post ?? postInitialValues});
   const {user} = useUserContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmitClick = async (data: PostDetailsForm) => {
     await handleSubmitPost(data);
-    reset({content: '', image: ''});
+    reset(postInitialValues);
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +64,12 @@ const PostForm: FC<Props> = ({handleSubmitPost}) => {
           </div>
         )}
         <div className={styles.content}>
-          <StyledTextArea {...register('content')} placeholder="What's on your mind?" minRows={2} maxRows={6} />
+          <StyledTextArea
+            {...register('content')}
+            placeholder="What's on your mind?"
+            minRows={2}
+            maxRows={post ? 3 : 6}
+          />
           <input
             type="file"
             ref={fileInputRef}
@@ -77,12 +87,12 @@ const PostForm: FC<Props> = ({handleSubmitPost}) => {
               </StyledButton>
             </div>
           ) : (
-            <IconButton className={styles.actionButton} onClick={() => fileInputRef.current?.click()}>
+            <StyledIconButton onClick={() => fileInputRef.current?.click()}>
               <AttachFileRounded />
-            </IconButton>
+            </StyledIconButton>
           )}
           <StyledButton startDecorator={<AddRounded />} disabled={!isValid} onClick={handleSubmit(onSubmitClick)}>
-            Share
+            {submitText}
           </StyledButton>
         </div>
       </div>

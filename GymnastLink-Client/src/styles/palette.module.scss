@@ -1,5 +1,7 @@
+$primaryColor: #00288D;
 $fontColor: #F5F5F5;
 
 :export {
+  primaryColor: $primaryColor;
   fontColor: $fontColor;
 }

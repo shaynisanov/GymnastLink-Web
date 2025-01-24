@@ -41,19 +41,5 @@
         max-width: 50%;
       }
     }
-
-    .actionButton {
-      transition: background-color 0.2s;
-
-      > svg {
-        fill: palette.$fontColor;
-      }
-
-      &:hover {
-        > svg {
-          fill: black;
-        }
-      }
-    }
   }
 }

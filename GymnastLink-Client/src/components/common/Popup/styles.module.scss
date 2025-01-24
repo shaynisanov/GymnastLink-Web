@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  justify-self: flex-end;
+}

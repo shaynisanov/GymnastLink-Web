@@ -9,7 +9,6 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-width: 60%;
 
     .header {
       display: flex;
@@ -33,28 +32,12 @@
       gap: 8px;
       justify-self: flex-end;
       align-items: center;
-
-      .actionButton {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        transition: background-color 0.2s;
-
-        > svg {
-          fill: palette.$fontColor;
-        }
-
-        &:hover {
-          > svg {
-            fill: black;
-          }
-
-          p {
-            color: black;
-          }
-        }
-      }
     }
+  }
+
+  .detailsContentWithImage {
+    @extend .detailsContent;
+    max-width: 60%;
   }
 
   .postImage {
