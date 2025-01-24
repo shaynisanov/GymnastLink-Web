@@ -17,6 +17,12 @@ const StyledButton = styled(Button)({
     color: '#2C2C2C',
     borderColor: commonStyles.fontColor,
   },
+  '&:disabled': {
+    backgroundColor: 'rgba(44, 44, 44, 0.2)',
+    color: 'rgba(255, 255, 255, 0.5)',
+    borderColor: 'rgba(44, 44, 44, 0.2)',
+    cursor: 'not-allowed',
+  },
 });
 
 export {StyledButton};

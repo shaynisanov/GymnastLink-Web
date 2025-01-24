@@ -7,7 +7,7 @@ interface Props extends Omit<AvatarProps, 'size'> {
 }
 
 const UserAvatar = styled(({userName, image, sizeLg, ...props}: Props) => (
-  <Avatar size={sizeLg ? 'lg' : undefined} alt={userName} src={image} {...props} />
+  <Avatar size={sizeLg ? 'lg' : undefined} alt={userName.toUpperCase()} src={image} {...props} />
 ))({
   width: 45,
   height: 45,

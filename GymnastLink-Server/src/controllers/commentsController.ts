@@ -22,11 +22,14 @@ class CommentsController extends BaseController<IComments> {
   }
 
   async getAll(req: Request, res: Response) {
-    const filter = req.query.filter;
+    const postId = req.query.postId;
 
     try {
-      if (filter) {
-        const item = await this.model.find({postId: filter});
+      if (postId) {
+        const post = await postModel.findById(postId);
+        if (!post) res.status(404).send(`Post with id ${postId} was not found`);
+
+        const item = await this.model.find({postId});
         res.send(item);
       } else {
         const items = await this.model.find();

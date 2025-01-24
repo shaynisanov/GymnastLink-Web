@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import commentsController from '../controllers/commentsController';
-import {authMiddleware} from '../controllers/usersController';
+import {authMiddleware} from '../controllers/authController';
 
 const router = Router();
 
@@ -55,35 +55,11 @@ const router = Router();
  *       500:
  *         description: Server error
  */
-router.get('/', commentsController.getAll.bind(commentsController));
-
-/**
- * @swagger
- * /comments/{id}:
- *   get:
- *     summary: Get a comment by ID
- *     description: Retrieve a single comment by its ID
- *     tags: [Comments]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The ID of the comment
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Comment retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
- *       404:
- *         description: Comment not found
- *       500:
- *         description: Server error
- */
-router.get('/:id', commentsController.getById.bind(commentsController));
+router.get(
+  '/',
+  authMiddleware,
+  commentsController.getAll.bind(commentsController)
+);
 
 /**
  * @swagger
@@ -126,78 +102,6 @@ router.post(
   '/',
   authMiddleware,
   commentsController.create.bind(commentsController)
-);
-
-/**
- * @swagger
- * /comments/{id}:
- *   put:
- *     summary: Update a comment by ID
- *     description: Update the content of a comment by its ID
- *     tags: [Comments]
- *     security:
- *       - bearerUser: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The ID of the comment to update
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               content:
- *                 type: string
- *                 description: The updated content of the comment
- *     responses:
- *       200:
- *         description: Comment updated successfully
- *       400:
- *         description: Bad request (invalid data)
- *       404:
- *         description: Comment not found
- *       500:
- *         description: Server error
- */
-router.put(
-  '/:id',
-  authMiddleware,
-  commentsController.updateItem.bind(commentsController)
-);
-
-/**
- * @swagger
- * /comments/{id}:
- *   delete:
- *     summary: Delete a comment by ID
- *     description: Delete a comment by its ID
- *     tags: [Comments]
- *     security:
- *       - bearerUser: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: The ID of the comment to delete
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Comment deleted successfully
- *       404:
- *         description: Comment not found
- *       500:
- *         description: Server error
- */
-router.delete(
-  '/:id',
-  authMiddleware,
-  commentsController.deleteItem.bind(commentsController)
 );
 
 export {router as commentRouter};

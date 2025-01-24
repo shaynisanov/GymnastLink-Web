@@ -1,15 +1,15 @@
 import * as express from 'express';
 import postsController from '../controllers/postsController';
-import {authMiddleware} from '../controllers/usersController';
+import {authMiddleware} from '../controllers/authController';
 
 const router = express.Router();
 
 /**
-* @swagger
-* tags:
-*   name: Posts
-*   description: The Posts API
-*/
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: The Posts API
+ */
 
 /**
  * @swagger
@@ -59,7 +59,7 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.get('/', postsController.getAll.bind(postsController));
+router.get('/', authMiddleware, postsController.getAll.bind(postsController));
 
 /**
  * @swagger
@@ -87,7 +87,11 @@ router.get('/', postsController.getAll.bind(postsController));
  *       500:
  *         description: Server error
  */
-router.get('/:id', postsController.getById.bind(postsController));
+router.get(
+  '/:id',
+  authMiddleware,
+  postsController.getById.bind(postsController)
+);
 
 /**
  * @swagger
