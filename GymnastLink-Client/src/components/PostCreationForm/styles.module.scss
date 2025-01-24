@@ -1,0 +1,46 @@
+@use "../../styles/palette.module";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .header {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .content {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    .postImage {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .actionButton {
+      transition: background-color 0.2s;
+
+      > svg {
+        fill: palette.$fontColor;
+      }
+
+      &:hover {
+        > svg {
+          fill: black;
+        }
+      }
+    }
+  }
+}
