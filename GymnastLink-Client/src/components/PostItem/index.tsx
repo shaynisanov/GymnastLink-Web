@@ -22,40 +22,46 @@ const PostItem = memo<Props>(({post}) => {
   return (
     <ContentCard>
       <div className={styles.container}>
-        {isFetchingUser || !creatingUser ? (
-          <PostUserSkeleton />
-        ) : (
-          <div className={styles.header}>
-            <UserAvatar userName={creatingUser.userName} />
-            <div className={styles.postDetails}>
-              <Typography level="body-lg" fontWeight={700}>
-                {`@${creatingUser.userName}`}
-              </Typography>
-              <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
+        <div className={styles.detailsContent}>
+          {isFetchingUser || !creatingUser ? (
+            <PostUserSkeleton />
+          ) : (
+            <div className={styles.header}>
+              <UserAvatar userName={creatingUser.userName} />
+              <div>
+                <Typography level="body-lg" fontWeight={700}>
+                  {`@${creatingUser.userName}`}
+                </Typography>
+                <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
+              </div>
             </div>
+          )}
+          <div className={styles.content}>
+            <Typography level="body-lg" className={styles.text}>
+              {post.content}
+            </Typography>
+          </div>
+          <div className={styles.actions}>
+            <IconButton className={styles.actionButton}>
+              <FavoriteBorderRounded />
+              <Typography level="body-md">0</Typography>
+            </IconButton>
+            <IconButton className={styles.actionButton}>
+              <ChatBubbleOutlineRounded />
+              <Typography level="body-md">0</Typography>
+            </IconButton>
+            {user?._id === post.userId && (
+              <IconButton className={styles.actionButton}>
+                <EditNoteRounded />
+              </IconButton>
+            )}
+          </div>
+        </div>
+        {post.image && (
+          <div className={styles.postImage}>
+            <img src={post.image} alt="post" />
           </div>
         )}
-        <div className={styles.content}>
-          <Typography level="body-lg" className={styles.text}>
-            {post.content}
-          </Typography>
-          {post.image && <img src={post.image} alt="post" />}
-        </div>
-        <div className={styles.actions}>
-          <IconButton className={styles.actionButton}>
-            <FavoriteBorderRounded />
-            <Typography level="body-md">0</Typography>
-          </IconButton>
-          <IconButton className={styles.actionButton}>
-            <ChatBubbleOutlineRounded />
-            <Typography level="body-md">0</Typography>
-          </IconButton>
-          {user?._id === post.userId && (
-            <IconButton className={styles.actionButton}>
-              <EditNoteRounded />
-            </IconButton>
-          )}
-        </div>
       </div>
     </ContentCard>
   );

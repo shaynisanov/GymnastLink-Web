@@ -15,7 +15,7 @@ const db = mongoose.connection;
 db.once('open', () => console.log('Connected to GymnastLink database'));
 db.on('error', (error) => console.error(error));
 
-app.use(json());
+app.use(json({limit: '50mb'}));
 app.use(cors());
 app.use(urlencoded({extended: true}));
 app.use('/posts', postRouter);

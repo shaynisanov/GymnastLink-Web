@@ -2,8 +2,8 @@ import {AxiosError} from 'axios';
 import {FC, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {Grid, Typography} from '@mui/joy';
-import {PostCreationForm} from '@components/PostCreationForm';
-import {NewPostForm} from '@components/PostCreationForm/form';
+import {PostForm} from '@components/PostForm';
+import {PostDetailsForm} from '@components/PostForm/form';
 import {PostList} from '@components/PostList';
 import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
@@ -22,11 +22,11 @@ const Updates: FC = () => {
     setPosts(initialPosts);
   }, [initialPosts]);
 
-  const handleCreateNewPost = async (newPostForm: NewPostForm) => {
+  const handleSubmitPost = async (postDetailsForm: PostDetailsForm) => {
     if (user) {
       try {
         const newPost = await createNewPost({
-          ...newPostForm,
+          ...postDetailsForm,
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
@@ -46,7 +46,7 @@ const Updates: FC = () => {
       </Grid>
       <Grid xs={5} className={styles.gridItem}>
         <Typography level="h2">New Post</Typography>
-        <PostCreationForm handleCreateNewPost={handleCreateNewPost} />
+        <PostForm handleSubmitPost={handleSubmitPost} />
       </Grid>
     </Grid>
   );

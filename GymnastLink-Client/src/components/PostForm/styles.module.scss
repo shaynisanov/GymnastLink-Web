@@ -27,7 +27,20 @@
   .actions {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+
+    .imagePreview {
+      display: flex;
+      gap: 16px;
+      text-wrap: nowrap;
+      align-items: flex-end;
+      max-width: 45%;
+
+      > img {
+        border-radius: 8px;
+        max-width: 50%;
+      }
+    }
 
     .actionButton {
       transition: background-color 0.2s;

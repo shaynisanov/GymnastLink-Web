@@ -2,57 +2,70 @@
 
 .container {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 16px;
 
-  .header {
+  .detailsContent {
     display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .content {
-    display: flex;
+    flex-direction: column;
     gap: 16px;
-    align-items: center;
+    max-width: 60%;
 
-    .text {
-      word-wrap: break-word;
-      overflow-wrap: anywhere;
+    .header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
 
-    .postImage {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
+    .content {
+      display: flex;
+      height: 100%;
+      align-self: flex-start;
+
+      .text {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      justify-self: flex-end;
+      align-items: center;
+
+      .actionButton {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        transition: background-color 0.2s;
+
+        > svg {
+          fill: palette.$fontColor;
+        }
+
+        &:hover {
+          > svg {
+            fill: black;
+          }
+
+          p {
+            color: black;
+          }
+        }
+      }
     }
   }
 
-  .actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+  .postImage {
+    width: 40%;
+    justify-self: flex-end;
+    align-content: center;
 
-    .actionButton {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      transition: background-color 0.2s;
-
-      > svg {
-        fill: palette.$fontColor;
-      }
-
-      &:hover {
-        > svg {
-          fill: black;
-        }
-
-        p {
-          color: black;
-        }
-      }
+    > img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
     }
   }
 }
