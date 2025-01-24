@@ -1,18 +1,19 @@
-import {yupResolver} from '@hookform/resolvers/yup';
-import {registerUser, userLogin} from '@services/authApi';
 import {AxiosError} from 'axios';
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {LoginRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
-// @ts-ignore
-import GoogleIcon from '@assets/Google-logo.svg?react';
 import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
-import {useUserContext} from '@contexts/UserContext';
 import {ClientRoutes} from '@enums/clientRoutes';
+// @ts-ignore
+import GoogleIcon from '@assets/Google-logo.svg?react';
+import {useUserContext} from '@contexts/UserContext';
+import {yupResolver} from '@hookform/resolvers/yup';
+import {useMutation} from '@hooks/useMutation';
+import {registerUser, userLogin} from '@services/authApi';
 import {UserLoginForm, loginSchema} from './form';
 import styles from './styles.module.scss';
 
@@ -25,37 +26,27 @@ const LoginForm: FC = () => {
   const navigate = useNavigate();
   const {setUser} = useUserContext();
 
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const {trigger: register, isLoading: isRegistering} = useMutation(registerUser);
+  const {trigger: login, isLoading: isLoggingIn} = useMutation(userLogin);
 
   const handleRegistration = async (loginForm: UserLoginForm) => {
-    setIsRegistering(true);
-
     try {
-      const newUser = await registerUser(loginForm);
-      setUser(newUser);
-
+      await register(loginForm);
       toast.success('Registration successful! You can now login');
     } catch (e) {
       toast.error(`Error registering user: ${(e as AxiosError)?.response?.data}`);
-    } finally {
-      setIsRegistering(false);
     }
   };
 
   const handleLogin = async (loginForm: UserLoginForm) => {
-    setIsLoggingIn(true);
-
     try {
-      const user = await userLogin(loginForm);
+      const user = await login(loginForm);
       setUser(user);
       navigate(ClientRoutes.UPDATES);
 
       toast.success(`Welcome back, ${user.userName}`);
     } catch (e) {
       toast.error(`Error logging in: ${(e as AxiosError)?.response?.data}`);
-    } finally {
-      setIsLoggingIn(false);
     }
   };
 

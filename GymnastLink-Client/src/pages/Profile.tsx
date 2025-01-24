@@ -1,25 +1,22 @@
-import {userLogout} from '@services/authApi';
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {StyledButton} from '@components/common/StyledButton';
+import {useMutation} from '@hooks/useMutation';
+import {userLogout} from '@services/authApi';
 
 const Profile: FC = () => {
   const navigate = useNavigate();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const {trigger: logout, isLoading: isLoggingOut} = useMutation(userLogout);
 
   const handleLogout = async () => {
-    setIsLoggingOut(true);
-
     try {
-      await userLogout();
+      await logout();
       navigate('/');
 
       toast.success('Logged out successfully');
     } catch (e) {
       toast.error('Error logging out');
-    } finally {
-      setIsLoggingOut(false);
     }
   };
 

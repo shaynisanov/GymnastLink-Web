@@ -1,34 +1,31 @@
 import {useState} from 'react';
 
 interface UseMutationResult<T> {
-  data: T | null;
-  loading: boolean;
+  isLoading: boolean;
   isSuccess: boolean;
-  error: Error | null;
-  trigger: (...args: any[]) => Promise<void>;
+  trigger: (...args: any[]) => Promise<T>;
 }
 
 const useMutation = <T,>(mutationFunction: (...args: any[]) => Promise<T>): UseMutationResult<T> => {
-  const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
 
   const trigger = async (...args: any[]) => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       const result = await mutationFunction(...args);
 
-      setData(result);
+      setIsLoading(false);
       setIsSuccess(true);
+
+      return result;
     } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
+      setIsLoading(false);
+      throw err;
     }
   };
 
-  return {data, loading, isSuccess, error, trigger};
+  return {isLoading, isSuccess, trigger};
 };
 
 export {useMutation};
