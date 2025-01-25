@@ -9,6 +9,7 @@ import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
 import styles from '@styles/updates.module.scss';
 
@@ -23,11 +24,28 @@ const Updates: FC = () => {
     setPosts(initialPosts);
   }, [initialPosts]);
 
+  const handleUploadPostImage = async (postDetailsForm: PostDetailsForm) => {
+    let imageUrl: string | undefined;
+
+    if (postDetailsForm.image) {
+      try {
+        const result = await saveNewFile(postDetailsForm.image);
+        imageUrl = result.url;
+      } catch (e) {
+        toast.error("We couldn't upload your image");
+      }
+    }
+
+    return imageUrl;
+  };
+
   const handleCreatePost = async (postDetailsForm: PostDetailsForm) => {
     if (user) {
       try {
+        const imageUrl = await handleUploadPostImage(postDetailsForm);
         const newPost = await createNewPost({
-          ...postDetailsForm,
+          content: postDetailsForm.content,
+          imageUrl,
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
@@ -42,8 +60,10 @@ const Updates: FC = () => {
   const handleEditPost = async (postDetailsForm: PostDetailsForm) => {
     if (user && editedPost) {
       try {
+        const imageUrl = await handleUploadPostImage(postDetailsForm);
         const updatedPost = await updatePost(editedPost._id, {
-          ...postDetailsForm,
+          content: postDetailsForm.content,
+          imageUrl,
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });

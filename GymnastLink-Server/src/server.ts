@@ -8,6 +8,7 @@ import {userRouter} from './routes/usersRoutes';
 import 'dotenv/config';
 import {setupSwagger} from './swaggerConfig';
 import {authRouter} from './routes/authRoutes';
+import {filesRouter} from './routes/filesRoute';
 
 const app = express();
 
@@ -18,10 +19,12 @@ db.on('error', (error) => console.error(error));
 app.use(json({limit: '50mb'}));
 app.use(cors());
 app.use(urlencoded({extended: true}));
+app.use(express.static('public'));
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
+app.use('/files', filesRouter);
 
 setupSwagger(app);
 

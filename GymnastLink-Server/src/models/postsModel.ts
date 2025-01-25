@@ -2,7 +2,7 @@ import {model, Schema, Types} from 'mongoose';
 
 interface IPost {
   content: string;
-  image?: string;
+  imageUrl?: string;
   userId: Types.ObjectId;
   createdTime: string;
 }
@@ -12,7 +12,7 @@ const postSchema = new Schema<IPost>({
     type: String,
     required: true,
   },
-  image: String,
+  imageUrl: String,
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'Users',

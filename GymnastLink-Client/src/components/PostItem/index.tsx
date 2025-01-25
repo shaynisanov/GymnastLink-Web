@@ -33,7 +33,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   return (
     <ContentCard>
       <div className={styles.container}>
-        <div className={post.image ? styles.detailsContentWithImage : styles.detailsContent}>
+        <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
           {isFetchingUser || !creatingUser ? (
             <PostUserSkeleton />
           ) : (
@@ -73,9 +73,9 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
             )}
           </div>
         </div>
-        {!!post.image && post.image.length > 0 && (
+        {!!post.imageUrl && post.imageUrl.length > 0 && (
           <div className={styles.postImage}>
-            <img src={post.image} alt="post" />
+            <img src={post.imageUrl} alt="post" />
           </div>
         )}
       </div>

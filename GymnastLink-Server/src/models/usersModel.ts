@@ -5,7 +5,7 @@ interface IUser {
   email: string;
   password: string;
   userName: string;
-  profileImage?: string;
+  profileImageUrl?: string;
   refreshToken?: string[];
 }
 
@@ -23,7 +23,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  profileImage: String,
+  profileImageUrl: String,
   refreshToken: {
     type: [String],
     default: [],

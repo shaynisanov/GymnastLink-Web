@@ -4,6 +4,7 @@ enum ServerRoutes {
   COMMENTS = 'comments',
   WORKOUTS = 'workouts',
   AUTH = 'auth',
+  FILES = 'files',
 }
 
 export {ServerRoutes};

@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, useCallback, useRef} from 'react';
+import {ChangeEvent, FC, useCallback, useRef, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {AddRounded, AttachFileRounded, DeleteRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
@@ -25,32 +25,37 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
     handleSubmit,
     register,
     reset,
-    watch,
     setValue,
     formState: {isValid},
   } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema), defaultValues: post ?? postInitialValues});
   const {user} = useUserContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const onSubmitClick = async (data: PostDetailsForm) => {
     await handleSubmitPost(data);
     reset(postInitialValues);
+    onRemoveImage();
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
+      setValue('image', file);
+
       const reader = new FileReader();
       reader.onloadend = () => {
-        setValue('image', reader.result as string);
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const onRemoveImage = useCallback(() => {
-    setValue('image', '');
-  }, [setValue]);
+    setValue('image', undefined);
+    setImagePreview(null);
+  }, [setValue, setImagePreview]);
 
   return (
     <ContentCard>
@@ -79,9 +84,9 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
           />
         </div>
         <div className={styles.actions}>
-          {watch().image ? (
+          {imagePreview ? (
             <div className={styles.imagePreview}>
-              <img src={watch().image} alt="Preview" />
+              <img src={imagePreview} alt="Preview" />
               <StyledButton startDecorator={<DeleteRounded />} onClick={onRemoveImage}>
                 Remove Image
               </StyledButton>
