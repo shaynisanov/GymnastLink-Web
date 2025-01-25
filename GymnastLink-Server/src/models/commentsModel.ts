@@ -4,6 +4,7 @@ interface IComments {
   postId: Types.ObjectId;
   userId: Types.ObjectId;
   content: string;
+  createdTime: string;
 }
 
 const commentSchema = new Schema<IComments>({
@@ -18,6 +19,10 @@ const commentSchema = new Schema<IComments>({
     required: true,
   },
   content: {
+    type: String,
+    required: true,
+  },
+  createdTime: {
     type: String,
     required: true,
   },

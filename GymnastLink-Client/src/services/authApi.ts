@@ -1,18 +1,16 @@
-import {axiosInstance} from '@services/axiosConfig';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {UserLoginForm} from '@components/LoginForm/form';
 import {LoggedUser} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
+import {axiosInstance} from '@services/axiosConfig';
 import {parseExpirationInDays} from '@utils/dateUtils';
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 const JWT_TOKEN_EXPIRES = import.meta.env.VITE_JWT_TOKEN_EXPIRES;
 
 const registerUser = async (loginForm: UserLoginForm) => {
-  const response = await axios.post<LoggedUser>(`${BASE_URL}/${ServerRoutes.AUTH}/register`, loginForm);
-
-  return response.data;
+  await axios.post(`${BASE_URL}/${ServerRoutes.AUTH}/register`, loginForm);
 };
 
 const userLogin = async (loginForm: UserLoginForm) => {

@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import {Express} from 'express';
 import {postModel} from '../models/postsModel';
 import {userModel} from '../models/usersModel';
+import {prepareUserForTests} from './prepareTests';
 
 let app: Express;
 let postId = '';
@@ -13,33 +14,21 @@ let userAccessToken = '';
 beforeAll(async () => {
   app = await initializeExpress();
 
-  const exampleUserDetails = {
-    email: 'testuser@example.com',
-    password: 'password123',
-  };
-
   await postModel.deleteMany();
   await userModel.deleteMany();
 
-  const userResponse = await request(app)
-    .post('/users/register')
-    .send(exampleUserDetails);
-
-  const loginResponse = await request(app)
-    .post('/users/login')
-    .send(exampleUserDetails);
-
-  userAccessToken = loginResponse.body.accessToken;
+  const user = await prepareUserForTests(app);
+  userAccessToken = user.accessToken;
+  userId = user._id;
 
   const postResponse = await request(app)
     .post('/posts')
     .set('Authorization', `Bearer ${userAccessToken}`)
     .send({
-      title: 'Test Post',
       content: 'This is a test post',
+      createdTime: new Date().toISOString(),
     });
 
-  userId = userResponse.body._id;
   postId = postResponse.body._id;
 });
 
@@ -50,7 +39,9 @@ afterAll((done) => {
 
 describe('Posts Tests', () => {
   test('get all posts', async () => {
-    const response = await request(app).get('/posts');
+    const response = await request(app)
+      .get('/posts')
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
@@ -62,23 +53,25 @@ describe('Posts Tests', () => {
       .post('/posts')
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
-        title: 'Test Post',
         content: 'This is a test post',
+        createdTime: new Date().toISOString(),
       });
 
     expect(response.statusCode).toBe(201);
-    expect(response.body.title).toBe('Test Post');
     expect(response.body.content).toBe('This is a test post');
     expect(response.body.userId).toBe(userId);
+    expect(response.body.createdTime).toBeDefined();
   });
 
   test('get post by id', async () => {
-    const response = await request(app).get(`/posts/${postId}`);
+    const response = await request(app)
+      .get(`/posts/${postId}`)
+      .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.title).toBe('Test Post');
     expect(response.body.content).toBe('This is a test post');
     expect(response.body.userId).toBe(userId);
+    expect(response.body.createdTime).toBeDefined();
   });
 
   test('update post', async () => {
@@ -86,13 +79,13 @@ describe('Posts Tests', () => {
       .put(`/posts/${postId}`)
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
-        title: 'Updated Test Post',
         content: 'Updated test content',
+        createdTime: new Date().toISOString(),
       });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.title).toBe('Updated Test Post');
     expect(response.body.content).toBe('Updated test content');
+    expect(response.body.createdTime).toBeDefined();
   });
 
   test('delete post', async () => {
@@ -117,8 +110,8 @@ describe('Posts Tests', () => {
       .put(`/posts/${new mongoose.Types.ObjectId()}`)
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
-        title: 'Non-existent Post',
         content: 'Trying to update non-existent post',
+        createdTime: new Date().toISOString(),
       });
 
     expect(response.statusCode).toBe(404);

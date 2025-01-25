@@ -9,14 +9,12 @@
     "@trivago/prettier-plugin-sort-imports"
   ],
   "importOrder": [
+    "^[a-z]",
     "^@mui/(.*)$",
-    "^@assets(.*)$",
-    "^@pages/(.*)$",
     "^@components/(.*)$",
     "^@customTypes/(.*)$",
-    "^@contexts/(.*)$",
     "^@enums/(.*)$",
-    "^@utils/(.*)$",
+    "^@",
     "^@styles/(.*)$",
     "^[./]"
   ],

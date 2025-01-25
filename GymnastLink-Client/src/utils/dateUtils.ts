@@ -1,3 +1,5 @@
+import {format} from 'date-fns';
+
 const parseExpirationInDays = (expiration: string) => {
   const match = expiration.match(/(\d+)([smhd])/);
   if (!match) return 0;
@@ -17,4 +19,6 @@ const parseExpirationInDays = (expiration: string) => {
   }
 };
 
-export {parseExpirationInDays};
+const formatDate = (dateString: string) => format(dateString, 'MMMM dd, yyyy. HH:mm');
+
+export {parseExpirationInDays, formatDate};
