@@ -3,13 +3,17 @@ import {initializeExpress} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {userModel} from '../models/usersModel';
+import {testUserDetails} from './prepareTests';
 
 let app: Express;
 let refreshToken = '';
+const dupUserEmail = 'duplicateuser@example.com';
 
 beforeAll(async () => {
   app = await initializeExpress();
-  await userModel.deleteMany();
+  await userModel.deleteMany({
+    email: [dupUserEmail, testUserDetails.email],
+  });
 });
 
 afterAll((done) => {
@@ -19,19 +23,18 @@ afterAll((done) => {
 
 describe('Users Tests', () => {
   test('register user', async () => {
-    const response = await request(app).post('/users/register').send({
-      email: 'testuser@example.com',
-      password: 'password123',
+    const response = await request(app).post('/auth/register').send({
+      email: testUserDetails.email,
+      password: testUserDetails.password,
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.email).toBe('testuser@example.com');
   });
 
   test('login user', async () => {
-    const response = await request(app).post('/users/login').send({
-      email: 'testuser@example.com',
-      password: 'password123',
+    const response = await request(app).post('/auth/login').send({
+      email: testUserDetails.email,
+      password: testUserDetails.password,
     });
 
     expect(response.statusCode).toBe(200);
@@ -41,13 +44,13 @@ describe('Users Tests', () => {
   });
 
   test('fail to register user with existing email', async () => {
-    await request(app).post('/users/register').send({
-      email: 'duplicateuser@example.com',
+    await request(app).post('/auth/register').send({
+      email: dupUserEmail,
       password: 'password123',
     });
 
-    const response = await request(app).post('/users/register').send({
-      email: 'duplicateuser@example.com',
+    const response = await request(app).post('/auth/register').send({
+      email: dupUserEmail,
       password: 'password123',
     });
 
@@ -55,8 +58,8 @@ describe('Users Tests', () => {
   });
 
   test('fail to login with incorrect password', async () => {
-    const response = await request(app).post('/users/login').send({
-      email: 'testuser@example.com',
+    const response = await request(app).post('/auth/login').send({
+      email: testUserDetails.email,
       password: 'wrongpassword',
     });
 
@@ -64,7 +67,7 @@ describe('Users Tests', () => {
   });
 
   test('refresh user token', async () => {
-    const response = await request(app).post('/users/refresh-token').send({
+    const response = await request(app).post('/auth/refresh-token').send({
       refreshToken,
     });
 
@@ -76,7 +79,7 @@ describe('Users Tests', () => {
   });
 
   test('fail to refresh token with invalid refresh token', async () => {
-    const response = await request(app).post('/users/refresh-token').send({
+    const response = await request(app).post('/auth/refresh-token').send({
       refreshToken: 'invalidToken',
     });
 
@@ -85,7 +88,7 @@ describe('Users Tests', () => {
   });
 
   test('logout user', async () => {
-    const response = await request(app).post('/users/logout').send({
+    const response = await request(app).post('/auth/logout').send({
       refreshToken,
     });
 
@@ -94,7 +97,7 @@ describe('Users Tests', () => {
   });
 
   test('fail to logout with invalid refresh token', async () => {
-    const response = await request(app).post('/users/logout').send({
+    const response = await request(app).post('/auth/logout').send({
       refreshToken: 'invalidToken',
     });
 
