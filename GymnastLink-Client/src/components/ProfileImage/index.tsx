@@ -1,13 +1,18 @@
 import {Avatar, AvatarProps, styled} from '@mui/joy';
+import {User} from '@customTypes/User';
 
-interface Props extends Omit<AvatarProps, 'size'> {
-  userName: string;
-  image?: string;
+interface Props extends Omit<AvatarProps, 'size' | 'src'> {
+  user: User;
   sizeLg?: true;
 }
 
-const UserAvatar = styled(({userName, image, sizeLg, ...props}: Props) => (
-  <Avatar size={sizeLg ? 'lg' : undefined} alt={userName.toUpperCase()} src={image} {...props} />
+const UserAvatar = styled(({user, sizeLg, ...props}: Props) => (
+  <Avatar
+    size={sizeLg ? 'lg' : undefined}
+    alt={user.userName.toUpperCase()}
+    src={user.profileImage ?? undefined}
+    {...props}
+  />
 ))({
   width: 45,
   height: 45,

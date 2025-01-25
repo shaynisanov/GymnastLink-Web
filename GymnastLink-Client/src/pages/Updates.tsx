@@ -25,7 +25,7 @@ const Updates: FC = () => {
   }, [initialPosts]);
 
   const handleUploadPostImage = async (postDetailsForm: PostDetailsForm) => {
-    let imageUrl: string | undefined;
+    let imageUrl: string | null = null;
 
     if (postDetailsForm.image) {
       try {

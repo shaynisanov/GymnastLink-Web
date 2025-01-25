@@ -1,7 +1,7 @@
 interface Post {
   _id: string;
   content: string;
-  imageUrl?: string;
+  imageUrl: string | null;
   userId: string;
   createdTime: string;
 }

@@ -3,7 +3,6 @@ import {initializeExpress} from '../server';
 import mongoose from 'mongoose';
 import {Express} from 'express';
 import {postModel} from '../models/postsModel';
-import {userModel} from '../models/usersModel';
 import {prepareUserForTests} from './prepareTests';
 
 let app: Express;
@@ -15,7 +14,6 @@ beforeAll(async () => {
   app = await initializeExpress();
 
   await postModel.deleteMany();
-  await userModel.deleteMany();
 
   const user = await prepareUserForTests(app);
   userAccessToken = user.accessToken;
@@ -26,6 +24,7 @@ beforeAll(async () => {
     .set('Authorization', `Bearer ${userAccessToken}`)
     .send({
       content: 'This is a test post',
+      imageUrl: null,
       createdTime: new Date().toISOString(),
     });
 
@@ -33,8 +32,10 @@ beforeAll(async () => {
 });
 
 afterAll((done) => {
-  mongoose.connection.close();
-  done();
+  postModel.deleteMany({userId}).then(() => {
+    mongoose.connection.close();
+    done();
+  });
 });
 
 describe('Posts Tests', () => {
@@ -54,6 +55,7 @@ describe('Posts Tests', () => {
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
         content: 'This is a test post',
+        imageUrl: null,
         createdTime: new Date().toISOString(),
       });
 
@@ -80,6 +82,7 @@ describe('Posts Tests', () => {
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
         content: 'Updated test content',
+        imageUrl: null,
         createdTime: new Date().toISOString(),
       });
 
@@ -98,8 +101,9 @@ describe('Posts Tests', () => {
 
   test('fail to create post without authorization', async () => {
     const response = await request(app).post('/posts').send({
-      title: 'Unauthorized Post',
       content: 'This post should not be created',
+      imageUrl: null,
+      createdTime: new Date().toISOString(),
     });
 
     expect(response.statusCode).toBe(401);
@@ -111,6 +115,7 @@ describe('Posts Tests', () => {
       .set('Authorization', `Bearer ${userAccessToken}`)
       .send({
         content: 'Trying to update non-existent post',
+        imageUrl: null,
         createdTime: new Date().toISOString(),
       });
 
