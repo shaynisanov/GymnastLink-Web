@@ -30,7 +30,7 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
   } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema), defaultValues: post ?? postInitialValues});
   const {user} = useUserContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(post?.imageUrl ?? null);
 
   const onSubmitClick = async (data: PostDetailsForm) => {
     await handleSubmitPost(data);
