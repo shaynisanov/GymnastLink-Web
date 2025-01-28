@@ -7,7 +7,6 @@ const responseShape: WorkoutPlan = {
     title: 'string (title of the workout)',
     content: 'string (description of the workout)',
 };
-};
 
 const createPrompt = (workoutDescription: string) => JSON.stringify([
     { role: 'system', content: 'You are a workout planner assistant.' },
