@@ -1,0 +1,11 @@
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100vh;
+
+    .buttonContainer {
+        width: auto;
+        align-self: flex-end;
+    }
+  }
