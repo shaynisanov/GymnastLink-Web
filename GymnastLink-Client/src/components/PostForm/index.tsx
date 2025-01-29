@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import {AddRounded, AttachFileRounded, DeleteRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {PostDetailsForm, postInitialValues, postSchema} from '@components/PostForm/form';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledIconButton} from '@components/common/StyledIconButton';

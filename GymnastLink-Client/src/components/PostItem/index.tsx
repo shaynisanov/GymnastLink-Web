@@ -2,7 +2,7 @@ import {memo, useCallback} from 'react';
 import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {PostUserSkeleton} from '@components/PostItem/PostItemSkeleton/PostUserSkeleton';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
 import {Post} from '@customTypes/Post';
