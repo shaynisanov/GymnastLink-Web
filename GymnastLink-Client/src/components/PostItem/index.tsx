@@ -38,7 +38,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
             <PostUserSkeleton />
           ) : (
             <div className={styles.header}>
-              <UserAvatar userName={creatingUser.userName} />
+              <UserAvatar user={creatingUser} />
               <div>
                 <Typography level="body-lg" fontWeight={700}>
                   {`@${creatingUser.userName}`}

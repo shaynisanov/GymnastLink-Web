@@ -1,7 +1,7 @@
 interface UserResponse {
   id: string;
   userName: string;
-  profileImageUrl?: string;
+  profileImageUrl: string | null;
 }
 
 export type {UserResponse};

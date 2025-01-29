@@ -62,7 +62,7 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
       <div className={styles.container}>
         {user && (
           <div className={styles.header}>
-            <UserAvatar userName={user.userName} />
+            <UserAvatar user={user} />
             <Typography level="body-lg" fontWeight={700}>
               {`@${user.userName}`}
             </Typography>
