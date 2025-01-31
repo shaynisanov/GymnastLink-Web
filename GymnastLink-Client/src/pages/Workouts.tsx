@@ -1,21 +1,21 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { Grid, Typography } from '@mui/joy';
-import styles from '@styles/updates.module.scss';
+import {FC, useCallback, useEffect, useState} from 'react';
+import {toast} from 'react-toastify';
+import {Grid, Typography} from '@mui/joy';
+import {Popup} from '@components/common/Popup';
 import WorkoutAIChat from '@components/workoutComponents/WorkoutAIChat';
+import WorkoutDetails from '@components/workoutComponents/WorkoutDetails';
 import WorkoutList from '@components/workoutComponents/WorkoutList';
-import { useUserContext } from '@contexts/UserContext';
-import { getAllByUser, createNewWorkout, planWorkout, deleteWorkout } from '@services/workoutApi';
-import { Popup } from '@components/common/Popup';
-import WorkoutForm from '@components/workoutComponents/WorkoutForm';
-import { Workout, WorkoutPlan } from '@customTypes/Workout';
-import { useLoadingWithDelay } from '@hooks/useLoadingWithDelay';
-import { useFetch } from '@hooks/useFetch';
+import {Workout, WorkoutPlan} from '@customTypes/Workout';
+import {useUserContext} from '@contexts/UserContext';
+import {useFetch} from '@hooks/useFetch';
+import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {createNewWorkout, deleteWorkout, getAllByUser, planWorkout} from '@services/workoutApi';
+import styles from '@styles/updates.module.scss';
 
 const Workouts: FC = () => {
-  const { user } = useUserContext();
-  const fetchWorkouts = useCallback(() => getAllByUser(user?._id || ''), [user?._id]);
-  const { data: initialWorkouts = [], isFetching } = useFetch(fetchWorkouts);
+  const {user} = useUserContext();
+  const fetchWorkouts = useCallback(() => getAllByUser(), []);
+  const {data: initialWorkouts = [], isFetching} = useFetch(fetchWorkouts);
   const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
   const [generatedWorkout, setGeneratedWorkout] = useState<WorkoutPlan | null>(null);
   const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
@@ -30,7 +30,6 @@ const Workouts: FC = () => {
       try {
         const generatedWorkout = await planWorkout(workoutDescription);
         setGeneratedWorkout(generatedWorkout);
-        console.log(generatedWorkout);
       } catch (e) {
         toast.error("We couldn't generate your workout");
       }
@@ -58,7 +57,7 @@ const Workouts: FC = () => {
   const handleDeleteWorkout = async (workoutId: string) => {
     try {
       await deleteWorkout(workoutId);
-      setWorkouts((prevState) => prevState.filter(({ _id }) => _id !== workoutId));
+      setWorkouts((prevState) => prevState.filter(({_id}) => _id !== workoutId));
       onCancelworkout();
       toast.success('Workout was successfully deleted');
     } catch (e) {
@@ -66,10 +65,10 @@ const Workouts: FC = () => {
     }
   };
 
-  const onCancelworkout = useCallback(() => {
+  const onCancelworkout = () => {
     setGeneratedWorkout(null);
     setSelectedWorkout(null);
-  }, []);
+  };
 
   const handleWorkoutClick = (workout: Workout) => {
     setSelectedWorkout(workout);
@@ -85,23 +84,23 @@ const Workouts: FC = () => {
         <Typography level="h2">Your workouts</Typography>
         <WorkoutList workouts={workouts} showLoading={showWorkoutLoading} onWorkoutClick={handleWorkoutClick} />
       </Grid>
-      <Popup open={!!generatedWorkout || !!selectedWorkout}
+      <Popup
+        open={!!generatedWorkout || !!selectedWorkout}
         title={generatedWorkout?.title || selectedWorkout?.title || 'Workout Plan'}
-        onCancel={onCancelworkout}>
+        onCancel={onCancelworkout}
+      >
         {generatedWorkout ? (
-          <WorkoutForm
-            buttonText='Save'
-            workoutDescription={generatedWorkout?.content || ''}
+          <WorkoutDetails
+            buttonText="Save"
+            workoutDescription={generatedWorkout?.content}
             handleButtonClick={handleSaveWorkout}
           />
         ) : (
-          <WorkoutForm
-            buttonText='Delete'
-            workoutDescription={selectedWorkout?.content || ''}
-            handleButtonClick={() =>
-              selectedWorkout ?
-                handleDeleteWorkout(selectedWorkout._id) :
-                Promise.resolve()} />
+          <WorkoutDetails
+            buttonText="Delete"
+            workoutDescription={selectedWorkout?.content}
+            handleButtonClick={() => (selectedWorkout ? handleDeleteWorkout(selectedWorkout._id) : Promise.resolve())}
+          />
         )}
       </Popup>
     </Grid>

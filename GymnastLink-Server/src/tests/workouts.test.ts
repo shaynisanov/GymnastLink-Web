@@ -43,7 +43,7 @@ describe('Workouts Tests', () => {
     const response = await request(app)
       .get('/workouts')
       .set('Authorization', `Bearer ${userAccessToken}`)
-      .query({ filter: userId });
+      .query({filter: userId});
 
     expect(response.statusCode).toBe(200);
     expect(response.body.length).toBe(1);
@@ -88,7 +88,9 @@ describe('Workouts Tests', () => {
   });
 
   test('fail to get all workouts by user without authorization', async () => {
-    const response = await request(app).get('/workouts').query({ filter: userId });
+    const response = await request(app)
+      .get('/workouts')
+      .query({filter: userId});
 
     expect(response.statusCode).toBe(401);
   });

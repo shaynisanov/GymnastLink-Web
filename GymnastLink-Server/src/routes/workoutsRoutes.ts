@@ -65,7 +65,11 @@ const router = express.Router();
  *       500:
  *         description: Server error
  */
-router.get('/', authMiddleware, workoutController.getAllByUser.bind(workoutController));
+router.get(
+  '/',
+  authMiddleware,
+  workoutController.getAllByUser.bind(workoutController)
+);
 
 /**
  * @swagger
@@ -110,7 +114,11 @@ router.get('/', authMiddleware, workoutController.getAllByUser.bind(workoutContr
  *       500:
  *         description: Server error
  */
-router.post('/', authMiddleware, workoutController.create.bind(workoutController));
+router.post(
+  '/',
+  authMiddleware,
+  workoutController.create.bind(workoutController)
+);
 
 /**
  * @swagger
@@ -145,7 +153,11 @@ router.post('/', authMiddleware, workoutController.create.bind(workoutController
  *       500:
  *         description: Server error
  */
-router.post('/plan', authMiddleware, workoutController.planWorkout.bind(workoutController));
+router.post(
+  '/plan',
+  authMiddleware,
+  workoutController.planWorkout.bind(workoutController)
+);
 
 /**
  * @swagger
