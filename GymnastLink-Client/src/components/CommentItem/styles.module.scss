@@ -1,0 +1,30 @@
+@use "../../styles/palette.module";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  .detailsContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .content {
+      display: flex;
+      height: 100%;
+      align-self: flex-start;
+
+      .text {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+}

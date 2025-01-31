@@ -1,13 +1,13 @@
 import {memo} from 'react';
 import {Skeleton} from '@mui/joy';
-import {PostUserSkeleton} from '@components/PostItem/PostItemSkeleton/PostUserSkeleton';
+import {UserSkeleton} from '@components/common/UserSkeleton';
 import {ContentCard} from '@components/common/ContentCard';
 import styles from './styles.module.scss';
 
 const PostItemSkeleton = memo(() => (
   <ContentCard>
     <div className={styles.container}>
-      <PostUserSkeleton />
+      <UserSkeleton />
       <Skeleton variant="text" width="100%" height={20} />
       <Skeleton variant="text" width="80%" height={20} />
       <Skeleton variant="text" width="90%" height={20} />
