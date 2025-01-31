@@ -11,6 +11,7 @@ import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
+import {deleteCommentsByPostId} from '@services/commentsApi';
 import styles from '@styles/updates.module.scss';
 
 const Updates: FC = () => {
@@ -78,6 +79,7 @@ const Updates: FC = () => {
 
   const handleDeletePost = async (postId: string) => {
     try {
+      await deleteCommentsByPostId(postId);
       await deletePost(postId);
       setPosts((prevState) => prevState.filter(({_id}) => _id !== postId));
       toast.success('Post was successfully deleted');
