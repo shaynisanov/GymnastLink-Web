@@ -2,9 +2,9 @@ import {FC} from 'react';
 import {Link, useLocation} from 'react-router';
 import {Typography} from '@mui/joy';
 import {menuItems} from '@components/Navbar/menuItems';
-import {UserAvatar} from '@components/ProfileImage';
-import {useUserContext} from '@contexts/UserContext';
+import {UserAvatar} from '@components/UserAvatar';
 import {ClientRoutes} from '@enums/clientRoutes';
+import {useUserContext} from '@contexts/UserContext';
 import {glassEffect} from '@styles/commonStyles';
 import styles from './styles.module.scss';
 
@@ -37,7 +37,7 @@ const NavBar: FC = () => {
           <Typography fontWeight={700} level="body-lg">
             {user.userName}
           </Typography>
-          <UserAvatar userName={user.userName} />
+          <UserAvatar user={user} />
         </div>
       )}
     </div>
