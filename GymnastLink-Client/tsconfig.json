@@ -7,7 +7,7 @@
       "esnext"
     ],
     "plugins": [
-      {"name": "@trivago/prettier-plugin-sort-imports"}GymnastLink-Client/tsconfig.json
+      {"name": "@trivago/prettier-plugin-sort-imports"}
     ],
     "allowJs": true,
     "skipLibCheck": true,
