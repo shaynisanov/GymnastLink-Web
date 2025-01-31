@@ -1,18 +1,18 @@
 import {memo, useCallback} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
-import {UserSkeleton} from '@components/common/UserSkeleton';
 import {UserAvatar} from '@components/ProfileImage';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
+import {UserSkeleton} from '@components/common/UserSkeleton';
 import {Post} from '@customTypes/Post';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
-import {useNavigate} from 'react-router-dom';
-import { ClientRoutes } from '@enums/clientRoutes';
 
 interface Props {
   post: Post;
@@ -27,7 +27,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick, showEditDelete 
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
 
   const onCommentsButtonClick = useCallback(() => {
-    navigate(ClientRoutes.COMMENTS, { state: { post } });
+    navigate(ClientRoutes.COMMENTS, {state: {post}});
   }, [post, history]);
 
   const onEditButtonClick = useCallback(() => {
