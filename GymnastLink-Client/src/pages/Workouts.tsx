@@ -5,7 +5,7 @@ import {Popup} from '@components/common/Popup';
 import WorkoutAIChat from '@components/workoutComponents/WorkoutAIChat';
 import WorkoutDetails from '@components/workoutComponents/WorkoutDetails';
 import WorkoutList from '@components/workoutComponents/WorkoutList';
-import {Workout, WorkoutPlan} from '@customTypes/Workout';
+import {Workout} from '@customTypes/Workout';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
@@ -17,8 +17,7 @@ const Workouts: FC = () => {
   const fetchWorkouts = useCallback(() => getAllByUser(), []);
   const {data: initialWorkouts = [], isFetching} = useFetch(fetchWorkouts);
   const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
-  const [generatedWorkout, setGeneratedWorkout] = useState<WorkoutPlan | null>(null);
-  const [selectedWorkout, setSelectedWorkout] = useState<Workout | null>(null);
+  const [displayedWorkout, setDisplayedWorkout] = useState<Workout | null>(null);
   const showWorkoutLoading = useLoadingWithDelay(isFetching);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const Workouts: FC = () => {
     if (user) {
       try {
         const generatedWorkout = await planWorkout(workoutDescription);
-        setGeneratedWorkout(generatedWorkout);
+        setDisplayedWorkout(generatedWorkout);
       } catch (e) {
         toast.error("We couldn't generate your workout");
       }
@@ -40,8 +39,8 @@ const Workouts: FC = () => {
     if (user) {
       try {
         const newWorkout = await createNewWorkout({
-          title: generatedWorkout?.title || '',
-          content: generatedWorkout?.content || '',
+          title: displayedWorkout?.title || '',
+          content: displayedWorkout?.content || '',
           userId: user._id,
           createdTime: new Date().toISOString(),
         });
@@ -66,12 +65,11 @@ const Workouts: FC = () => {
   };
 
   const onCancelworkout = () => {
-    setGeneratedWorkout(null);
-    setSelectedWorkout(null);
+    setDisplayedWorkout(null);
   };
 
   const handleWorkoutClick = (workout: Workout) => {
-    setSelectedWorkout(workout);
+    setDisplayedWorkout(workout);
   };
 
   return (
@@ -84,24 +82,14 @@ const Workouts: FC = () => {
         <Typography level="h2">Your workouts</Typography>
         <WorkoutList workouts={workouts} showLoading={showWorkoutLoading} onWorkoutClick={handleWorkoutClick} />
       </Grid>
-      <Popup
-        open={!!generatedWorkout || !!selectedWorkout}
-        title={generatedWorkout?.title || selectedWorkout?.title || 'Workout Plan'}
-        onCancel={onCancelworkout}
-      >
-        {generatedWorkout ? (
-          <WorkoutDetails
-            buttonText="Save"
-            workoutDescription={generatedWorkout?.content}
-            handleButtonClick={handleSaveWorkout}
-          />
-        ) : (
-          <WorkoutDetails
-            buttonText="Delete"
-            workoutDescription={selectedWorkout?.content}
-            handleButtonClick={() => (selectedWorkout ? handleDeleteWorkout(selectedWorkout._id) : Promise.resolve())}
-          />
-        )}
+      <Popup open={!!displayedWorkout} title={displayedWorkout?.title || 'Workout Plan'} onCancel={onCancelworkout}>
+        <WorkoutDetails
+          buttonText={displayedWorkout?._id ? 'Delete' : 'Save'}
+          workoutDescription={displayedWorkout?.content}
+          handleButtonClick={() =>
+            displayedWorkout && displayedWorkout._id ? handleDeleteWorkout(displayedWorkout._id) : handleSaveWorkout()
+          }
+        />
       </Popup>
     </Grid>
   );
