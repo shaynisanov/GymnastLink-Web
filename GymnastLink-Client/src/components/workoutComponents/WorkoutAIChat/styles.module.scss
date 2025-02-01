@@ -1,0 +1,10 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100vh;
+
+  .generateButton {
+    align-self: flex-end;
+  }
+}

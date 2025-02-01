@@ -1,0 +1,9 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  .actionButton {
+    align-self: flex-end;
+  }
+}
