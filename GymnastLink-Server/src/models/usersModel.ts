@@ -5,7 +5,7 @@ interface IUser {
   email: string;
   password: string;
   userName: string;
-  profileImageUrl?: string;
+  profileImageUrl: string | null;
   refreshToken?: string[];
 }
 

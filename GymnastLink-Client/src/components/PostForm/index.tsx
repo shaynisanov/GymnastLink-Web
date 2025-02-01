@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import {AddRounded, AttachFileRounded, DeleteRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {PostDetailsForm, postInitialValues, postSchema} from '@components/PostForm/form';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledIconButton} from '@components/common/StyledIconButton';
@@ -30,7 +30,7 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
   } = useForm<PostDetailsForm>({resolver: yupResolver(postSchema), defaultValues: post ?? postInitialValues});
   const {user} = useUserContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(post?.imageUrl ?? null);
 
   const onSubmitClick = async (data: PostDetailsForm) => {
     await handleSubmitPost(data);
@@ -62,7 +62,7 @@ const PostForm: FC<Props> = ({submitText, handleSubmitPost, post}) => {
       <div className={styles.container}>
         {user && (
           <div className={styles.header}>
-            <UserAvatar userName={user.userName} />
+            <UserAvatar user={user} />
             <Typography level="body-lg" fontWeight={700}>
               {`@${user.userName}`}
             </Typography>

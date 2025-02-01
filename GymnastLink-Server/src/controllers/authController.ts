@@ -26,6 +26,7 @@ const register = async (req: Request, res: Response) => {
     await userModel.create({
       email: req.body.email,
       password: hashedPassword,
+      profileImageUrl: null,
       userName,
     });
 

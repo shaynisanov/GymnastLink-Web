@@ -2,7 +2,7 @@ import {memo, useCallback} from 'react';
 import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {PostUserSkeleton} from '@components/PostItem/PostItemSkeleton/PostUserSkeleton';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
 import {Post} from '@customTypes/Post';
@@ -38,7 +38,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
             <PostUserSkeleton />
           ) : (
             <div className={styles.header}>
-              <UserAvatar userName={creatingUser.userName} />
+              <UserAvatar user={creatingUser} />
               <div>
                 <Typography level="body-lg" fontWeight={700}>
                   {`@${creatingUser.userName}`}
