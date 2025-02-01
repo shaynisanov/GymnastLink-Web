@@ -1,6 +1,12 @@
 import {FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
+import {
+  ChatBubbleOutlineRounded,
+  DeleteRounded,
+  EditNoteRounded,
+  FavoriteBorderRounded,
+  FavoriteRounded,
+} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
 import {UserAvatar} from '@components/ProfileImage';
 import {ContentCard} from '@components/common/ContentCard';
@@ -11,6 +17,7 @@ import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {getCommentCount} from '@services/commentsApi';
+import {handleLike} from '@services/postsApi';
 import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
@@ -26,6 +33,8 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
   const navigate = useNavigate();
   const {user} = useUserContext();
   const [commentCount, setCommentCount] = useState(0);
+  const [likes, setLikes] = useState(post.likes.length);
+  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
 
   useEffect(() => {
@@ -40,6 +49,21 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
 
     fetchCommentCount();
   });
+
+  const handleLikeButton = async () => {
+    try {
+      if (isLiked) {
+        await handleLike(post._id);
+        setLikes(likes - 1);
+      } else {
+        await handleLike(post._id);
+        setLikes(likes + 1);
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onCommentsButtonClick = useCallback(() => {
     navigate(ClientRoutes.COMMENTS, {state: {post}});
@@ -76,9 +100,9 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
             </Typography>
           </div>
           <div className={styles.actions}>
-            <StyledIconButton>
-              <FavoriteBorderRounded />
-              <Typography level="body-md">0</Typography>
+            <StyledIconButton onClick={handleLikeButton}>
+              {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
+              <Typography level="body-md">{likes}</Typography>
             </StyledIconButton>
             <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />

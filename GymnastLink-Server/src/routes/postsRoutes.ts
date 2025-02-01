@@ -207,4 +207,36 @@ router.delete(
   postsController.deleteItem.bind(postsController)
 );
 
+/**
+ * @swagger
+ * /posts/like:
+ *   post:
+ *     summary: like and unlike post by userId
+ *     description: like and unlike single post by userId
+ *     tags: [Posts]
+ *     security:
+ *       - bearerUser: []
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         description: The ID of the post
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Post liked/unliked successfully
+ *       400:
+ *         description: Bad request (invalid data)
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Server error
+ */
+router.post(
+  '/like/:postId',
+  authMiddleware,
+  postsController.handleLike.bind(postsController)
+);
+
 export {router as postRouter};
