@@ -26,14 +26,17 @@ beforeAll(async () => {
     .set('Authorization', `Bearer ${userAccessToken}`)
     .send({
       content: 'This is a test post',
+      imageUrl: null,
       createdTime: new Date().toISOString(),
     });
   postId = postResponse.body._id;
 });
 
 afterAll((done) => {
-  mongoose.connection.close();
-  done();
+  postModel.deleteMany({userId}).then(() => {
+    mongoose.connection.close();
+    done();
+  });
 });
 
 describe('Comments Tests', () => {

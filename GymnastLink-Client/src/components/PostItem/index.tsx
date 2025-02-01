@@ -8,7 +8,7 @@ import {
   FavoriteRounded,
 } from '@mui/icons-material';
 import {Typography} from '@mui/joy';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
 import {UserSkeleton} from '@components/common/UserSkeleton';
@@ -85,7 +85,7 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
             <UserSkeleton />
           ) : (
             <div className={styles.header}>
-              <UserAvatar userName={creatingUser.userName} />
+              <UserAvatar user={creatingUser} />
               <div>
                 <Typography level="body-lg" fontWeight={700}>
                   {`@${creatingUser.userName}`}

@@ -2,7 +2,7 @@ import {model, Schema, Types} from 'mongoose';
 
 interface IPost {
   content: string;
-  imageUrl?: string;
+  imageUrl: string | null;
   userId: Types.ObjectId;
   createdTime: string;
   likes: [Types.ObjectId];

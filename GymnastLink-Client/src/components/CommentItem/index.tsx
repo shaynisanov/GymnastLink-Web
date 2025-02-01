@@ -1,6 +1,6 @@
 import {memo} from 'react';
 import {Typography} from '@mui/joy';
-import {UserAvatar} from '@components/ProfileImage';
+import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {UserSkeleton} from '@components/common/UserSkeleton';
 import {Comment} from '@customTypes/Comment';
@@ -24,7 +24,7 @@ const CommentItem = memo<Props>(({comment}) => {
             <UserSkeleton />
           ) : (
             <div className={styles.header}>
-              <UserAvatar userName={creatingUser.userName} />
+              <UserAvatar user={creatingUser} />
               <div>
                 <Typography level="body-lg" fontWeight={700}>
                   {`@${creatingUser.userName}`}
