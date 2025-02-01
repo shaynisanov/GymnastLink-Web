@@ -1,4 +1,4 @@
-import {memo, useCallback} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
@@ -10,6 +10,7 @@ import {Post} from '@customTypes/Post';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
+import {getCommentCount} from '@services/commentsApi';
 import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
@@ -21,10 +22,24 @@ interface Props {
   showEditDelete?: boolean;
 }
 
-const PostItem = memo<Props>(({post, onEditClick, onDeleteClick, showEditDelete = true}) => {
+const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete = true}) => {
   const navigate = useNavigate();
   const {user} = useUserContext();
+  const [commentCount, setCommentCount] = useState(0);
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
+
+  useEffect(() => {
+    const fetchCommentCount = async () => {
+      try {
+        const response = await getCommentCount(post._id);
+        setCommentCount(response);
+      } catch (error) {
+        console.error('Error fetching comment count', error);
+      }
+    };
+
+    fetchCommentCount();
+  });
 
   const onCommentsButtonClick = useCallback(() => {
     navigate(ClientRoutes.COMMENTS, {state: {post}});
@@ -67,7 +82,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick, showEditDelete 
             </StyledIconButton>
             <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />
-              <Typography level="body-md">0</Typography>
+              <Typography level="body-md">{commentCount}</Typography>
             </StyledIconButton>
             {showEditDelete && user?._id === post.userId && (
               <>
@@ -89,5 +104,5 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick, showEditDelete 
       </div>
     </ContentCard>
   );
-});
+};
 export {PostItem};

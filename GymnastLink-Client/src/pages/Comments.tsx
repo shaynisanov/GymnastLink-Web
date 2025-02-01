@@ -40,6 +40,7 @@ const Comments = () => {
           createdTime: new Date().toISOString(),
         });
         setComments((prevState) => [newComment, ...prevState]);
+        setCommentContent('');
         toast.success('Comment was added');
       } catch (e) {
         toast.error("We couldn't add your new comment");
