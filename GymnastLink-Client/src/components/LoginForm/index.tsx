@@ -13,6 +13,7 @@ import GoogleIcon from '@assets/Google-logo.svg?react';
 import {useUserContext} from '@contexts/UserContext';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@hooks/useMutation';
+import {GoogleLogin} from '@react-oauth/google';
 import {registerUser, userLogin} from '@services/authApi';
 import {UserLoginForm, loginSchema} from './form';
 import styles from './styles.module.scss';
@@ -68,7 +69,7 @@ const LoginForm: FC = () => {
         placeholder="Enter your password"
       />
       <div className={styles.actionsContainer}>
-        <StyledButton startDecorator={<GoogleIcon />}>Login With Google</StyledButton>
+        <GoogleLogin onSuccess={() => console.log('yey')} onError={() => console.log('error')} />
         <div className={styles.loginRegister}>
           <StyledButton disabled={!isValid} loading={isRegistering} onClick={handleSubmit(handleRegistration)}>
             Register
