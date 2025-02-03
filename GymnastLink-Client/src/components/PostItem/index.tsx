@@ -1,5 +1,6 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {FC, memo, useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import {
   ChatBubbleOutlineRounded,
   DeleteRounded,
@@ -24,18 +25,17 @@ import styles from './styles.module.scss';
 
 interface Props {
   post: Post;
-  onEditClick: (post: Post) => void;
-  onDeleteClick: (postId: string) => void;
-  showEditDelete?: boolean;
+  onEditClick?: (post: Post) => void;
+  onDeleteClick?: (postId: string) => void;
 }
 
-const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete = true}) => {
+const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
   const navigate = useNavigate();
   const {user} = useUserContext();
   const [commentCount, setCommentCount] = useState(0);
-  const [likes, setLikes] = useState(post.likes.length);
-  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
+  const [likeCount, setLikeCount] = useState(post.likes.length);
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
+  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
 
   useEffect(() => {
     const fetchCommentCount = async () => {
@@ -52,29 +52,24 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
 
   const handleLikeButton = async () => {
     try {
-      if (isLiked) {
-        await handleLike(post._id);
-        setLikes(likes - 1);
-      } else {
-        await handleLike(post._id);
-        setLikes(likes + 1);
-      }
+      await handleLike(post._id);
+      setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
       setIsLiked(!isLiked);
     } catch (error) {
-      console.log(error);
+      toast.error(`we couldn't handle your like in the post`);
     }
   };
 
   const onCommentsButtonClick = useCallback(() => {
     navigate(ClientRoutes.COMMENTS, {state: {post}});
-  }, [post, history]);
+  }, [post._id, navigate]);
 
   const onEditButtonClick = useCallback(() => {
-    onEditClick(post);
+    onEditClick?.(post);
   }, [post, onEditClick]);
 
   const onDeleteButtonClick = useCallback(() => {
-    onDeleteClick(post._id);
+    onDeleteClick?.(post._id);
   }, [post._id, onDeleteClick]);
 
   return (
@@ -102,13 +97,13 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick, showEditDelete =
           <div className={styles.actions}>
             <StyledIconButton onClick={handleLikeButton}>
               {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
-              <Typography level="body-md">{likes}</Typography>
+              <Typography level="body-md">{likeCount}</Typography>
             </StyledIconButton>
             <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />
               <Typography level="body-md">{commentCount}</Typography>
             </StyledIconButton>
-            {showEditDelete && user?._id === post.userId && (
+            {onEditClick && onDeleteClick && user?._id === post.userId && (
               <>
                 <StyledIconButton onClick={onEditButtonClick}>
                   <EditNoteRounded />
