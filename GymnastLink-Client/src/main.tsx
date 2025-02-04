@@ -12,6 +12,7 @@ import {UserProvider} from '@contexts/UserContext';
 import {ClientRoutes} from '@enums/clientRoutes';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
+import Comments from '@pages/Comments';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
               <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
               <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
               <Route path={ClientRoutes.PROFILE} element={<Profile />} />
+              <Route path={ClientRoutes.COMMENTS} element={<Comments />} />
             </Route>
           </Routes>
           <ToastContainer position="bottom-left" />

@@ -1,33 +1,75 @@
-import {memo, useCallback} from 'react';
-import {ChatBubbleOutlineRounded, DeleteRounded, EditNoteRounded, FavoriteBorderRounded} from '@mui/icons-material';
+import {FC, memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {
+  ChatBubbleOutlineRounded,
+  DeleteRounded,
+  EditNoteRounded,
+  FavoriteBorderRounded,
+  FavoriteRounded,
+} from '@mui/icons-material';
 import {Typography} from '@mui/joy';
-import {PostUserSkeleton} from '@components/PostItem/PostItemSkeleton/PostUserSkeleton';
 import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
+import {UserSkeleton} from '@components/common/UserSkeleton';
 import {Post} from '@customTypes/Post';
+import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
+import {getCommentCount} from '@services/commentsApi';
+import {handleLike} from '@services/postsApi';
 import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
 interface Props {
   post: Post;
-  onEditClick: (post: Post) => void;
-  onDeleteClick: (postId: string) => void;
+  onEditClick?: (post: Post) => void;
+  onDeleteClick?: (postId: string) => void;
 }
 
-const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
+const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
+  const navigate = useNavigate();
   const {user} = useUserContext();
+  const [commentCount, setCommentCount] = useState(0);
+  const [likeCount, setLikeCount] = useState(post.likes.length);
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
+  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
+
+  useEffect(() => {
+    const fetchCommentCount = async () => {
+      try {
+        const response = await getCommentCount(post._id);
+        setCommentCount(response);
+      } catch (error) {
+        console.error('Error fetching comment count', error);
+      }
+    };
+
+    fetchCommentCount();
+  });
+
+  const handleLikeButton = async () => {
+    try {
+      await handleLike(post._id);
+      setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+      setIsLiked(!isLiked);
+    } catch (error) {
+      toast.error(`we couldn't handle your like in the post`);
+    }
+  };
+
+  const onCommentsButtonClick = useCallback(() => {
+    navigate(ClientRoutes.COMMENTS, {state: {post}});
+  }, [post._id, navigate]);
 
   const onEditButtonClick = useCallback(() => {
-    onEditClick(post);
+    onEditClick?.(post);
   }, [post, onEditClick]);
 
   const onDeleteButtonClick = useCallback(() => {
-    onDeleteClick(post._id);
+    onDeleteClick?.(post._id);
   }, [post._id, onDeleteClick]);
 
   return (
@@ -35,7 +77,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
       <div className={styles.container}>
         <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
           {isFetchingUser || !creatingUser ? (
-            <PostUserSkeleton />
+            <UserSkeleton />
           ) : (
             <div className={styles.header}>
               <UserAvatar user={creatingUser} />
@@ -53,15 +95,15 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
             </Typography>
           </div>
           <div className={styles.actions}>
-            <StyledIconButton>
-              <FavoriteBorderRounded />
-              <Typography level="body-md">0</Typography>
+            <StyledIconButton onClick={handleLikeButton}>
+              {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
+              <Typography level="body-md">{likeCount}</Typography>
             </StyledIconButton>
-            <StyledIconButton>
+            <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />
-              <Typography level="body-md">0</Typography>
+              <Typography level="body-md">{commentCount}</Typography>
             </StyledIconButton>
-            {user?._id === post.userId && (
+            {onEditClick && onDeleteClick && user?._id === post.userId && (
               <>
                 <StyledIconButton onClick={onEditButtonClick}>
                   <EditNoteRounded />
@@ -81,5 +123,5 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
       </div>
     </ContentCard>
   );
-});
+};
 export {PostItem};
