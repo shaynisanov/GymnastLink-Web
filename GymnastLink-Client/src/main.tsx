@@ -15,7 +15,7 @@ import '@styles/index.module.scss';
 import {theme} from './Theme';
 
 createRoot(document.getElementById('root')!).render(
-  <GoogleOAuthProvider clientId='need to put here id'>
+  <GoogleOAuthProvider clientId="1070493279650-fdhbigfkh36sbo7tig40j34cifj0j007.apps.googleusercontent.com">
     <StrictMode>
       <ThemeProvider theme={theme}>
         <CssBaseline />
