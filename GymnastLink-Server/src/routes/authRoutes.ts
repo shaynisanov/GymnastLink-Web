@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {
   authMiddleware,
   getCurrentUserData,
+  googleSignin,
   login,
   logout,
   refreshUserToken,
@@ -218,5 +219,32 @@ router.post('/refresh-token', refreshUserToken);
  *         description: Server error
  */
 router.get('/user-data', authMiddleware, getCurrentUserData);
+
+/**
+ * @swagger
+ * /auth/google-signin:
+ *   post:
+ *     summary: User login with google
+ *     description: Authenticate user and return tokens
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Successful login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tokens'
+ *       400:
+ *         description: Invalid credentials or request
+ *       500:
+ *         description: Server error
+ */
+router.post('/google-signin', googleSignin);
 
 export {router as authRouter};

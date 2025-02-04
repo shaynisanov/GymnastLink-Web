@@ -1,8 +1,9 @@
-import {NextFunction, Request, Response} from 'express';
+import {NextFunction, Request, RequestHandler, Response} from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {userModel} from '../models/usersModel';
 import {RequestWithUserId} from '../types/request';
+import {OAuth2Client} from 'google-auth-library';
 
 const INVALID_CREDENTIALS = 'Invalid login credentials';
 const INTERNAL_ERROR = 'Internal Server Error';
@@ -68,6 +69,23 @@ const generateUserJwtToken = (userId: string) => {
   return {accessToken, refreshToken};
 };
 
+const updateUserTokens = async (user: any) => {
+  const tokens = generateUserJwtToken(user._id);
+
+  if (!tokens) {
+    throw new Error(INTERNAL_ERROR);
+  }
+
+  if (!user.refreshToken) {
+    user.refreshToken = [];
+  }
+
+  user.refreshToken.push(tokens.refreshToken);
+  await user.save();
+
+  return tokens;
+};
+
 const login = async (req: Request, res: Response) => {
   try {
     const user = await userModel.findOne({email: req.body.email});
@@ -87,18 +105,7 @@ const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const tokens = generateUserJwtToken(user._id);
-
-    if (!tokens) {
-      res.status(500).send(INTERNAL_ERROR);
-      return;
-    }
-    if (!user.refreshToken) {
-      user.refreshToken = [];
-    }
-
-    user.refreshToken.push(tokens.refreshToken);
-    await user.save();
+    const tokens = await updateUserTokens(user);
 
     res.status(200).send({
       userName: user.userName,
@@ -258,6 +265,47 @@ const authMiddleware = async (
   } else res.status(401).send(ACCESS_DENIED);
 };
 
+const client = new OAuth2Client();
+const googleSignin: RequestHandler = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const credential = req.body.credential;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const email = payload?.email;
+    let user = await userModel.findOne({email: email});
+
+    if (user == null) {
+      const userName = email?.split('@')[0];
+
+      user = await userModel.create({
+        email: email,
+        password: 'google-signin',
+        profileImageUrl: payload?.picture,
+        userName,
+      });
+    }
+
+    const tokens = await updateUserTokens(user);
+
+    res.status(200).send({
+      userName: user.userName,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      _id: user._id,
+    });
+  } catch (err) {
+    res.status(400).send('error missing email or password');
+  }
+};
+
 export {
   register,
   login,
@@ -265,4 +313,5 @@ export {
   getCurrentUserData,
   refreshUserToken,
   authMiddleware,
+  googleSignin,
 };
