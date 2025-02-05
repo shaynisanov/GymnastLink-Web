@@ -32,18 +32,17 @@ class UsersController extends BaseController<IUser> {
 
   async updateProfileImage(req: RequestWithUserId, res: Response) {
     try {
-      const updatedUser = userModel.updateOne(
+      const updatedUser = await userModel.updateOne(
         {_id: req.body.userId},
-        {$set: {profileImageUrl: req.body.imageUrl}}
+        {$set: {profileImageUrl: req.body.imageUrl}},
+        {new: true}
       );
 
       if (updatedUser) {
-        res.status(200).json(updatedUser);
+        res.status(200).send(updatedUser);
       } else {
         res.status(404).json({error: 'User not found'});
       }
-
-      res.status(200).json(updatedUser);
     } catch (error) {
       res.status(400).send(error);
     }

@@ -10,7 +10,7 @@ const UserAvatar = styled(({user, sizeLg, ...props}: Props) => (
   <Avatar
     size={sizeLg ? 'lg' : undefined}
     alt={user.userName.toUpperCase()}
-    src={user.profileImage ?? undefined}
+    src={user.profileImageUrl ?? undefined}
     {...props}
   />
 ))({

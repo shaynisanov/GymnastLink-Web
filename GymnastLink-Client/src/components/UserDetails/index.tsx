@@ -25,9 +25,9 @@ const UserDetails: FC<Props> = ({user, postCount, workoutCount, isLoading, onUpd
 
   return user && !isLoading ? (
     <div className={styles.profileContainer}>
-      <UserAvatar user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
+      <UserAvatar className={styles.avatar} user={user} sizeLg onClick={() => fileInputRef.current?.click()} />
       <input type="file" ref={fileInputRef} style={{display: 'none'}} accept="image/*" onChange={handleFileChange} />
-      <div className={styles.horizontalContainer}>
+      <div className={styles.detailsContainer}>
         <Typography level="h2" fontWeight={700}>
           {`@${user.userName}`}
         </Typography>
@@ -38,7 +38,7 @@ const UserDetails: FC<Props> = ({user, postCount, workoutCount, isLoading, onUpd
   ) : (
     <div className={styles.profileContainer}>
       <Skeleton variant="circular" width={245} height={245} />
-      <div className={styles.horizontalContainer}>
+      <div className={styles.detailsContainer}>
         <Skeleton animation="wave" variant="text" width={200} height={40} />
         <Skeleton animation="wave" variant="text" width={100} height={40} />
         <Skeleton animation="wave" variant="text" width={100} height={40} />

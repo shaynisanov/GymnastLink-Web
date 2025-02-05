@@ -1,7 +1,7 @@
 interface User {
   _id: string;
   userName: string;
-  profileImage: string | null;
+  profileImageUrl: string | null;
 }
 
 interface LoggedUser extends User {
