@@ -1,4 +1,4 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {memo, useCallback, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {
@@ -17,7 +17,6 @@ import {Post} from '@customTypes/Post';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
-import {getCommentCount} from '@services/commentsApi';
 import {handleLike} from '@services/postsApi';
 import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
@@ -29,40 +28,33 @@ interface Props {
   onDeleteClick?: (postId: string) => void;
 }
 
-const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
+const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   const navigate = useNavigate();
   const {user} = useUserContext();
-  const [commentCount, setCommentCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(post.likes.length);
+  const [likes, setLikes] = useState(post.likes);
   const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, post.userId);
-  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
-
-  useEffect(() => {
-    const fetchCommentCount = async () => {
-      try {
-        const response = await getCommentCount(post._id);
-        setCommentCount(response);
-      } catch (error) {
-        console.error('Error fetching comment count', error);
-      }
-    };
-
-    fetchCommentCount();
-  });
 
   const handleLikeButton = async () => {
-    try {
-      await handleLike(post._id);
-      setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
-      setIsLiked(!isLiked);
-    } catch (error) {
-      toast.error(`we couldn't handle your like in the post`);
+    if (user) {
+      try {
+        await handleLike(post._id);
+
+        if (isLiked) {
+          setLikes(prevState => prevState.filter(id => id !== user._id));
+        } else {
+          setLikes(prevState => [...prevState, user._id]);
+        }
+      } catch (error) {
+        toast.error(`We couldn't handle your like in the post`);
+      }
     }
   };
 
+  const isLiked = useMemo(() => (user ? likes.includes(user._id) : false), [likes, user]);
+
   const onCommentsButtonClick = useCallback(() => {
     navigate(ClientRoutes.COMMENTS, {state: {post}});
-  }, [post._id, navigate]);
+  }, [navigate, post]);
 
   const onEditButtonClick = useCallback(() => {
     onEditClick?.(post);
@@ -97,11 +89,11 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
           <div className={styles.actions}>
             <StyledIconButton onClick={handleLikeButton}>
               {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
-              <Typography level="body-md">{likeCount}</Typography>
+              <Typography level="body-md">{likes.length}</Typography>
             </StyledIconButton>
             <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />
-              <Typography level="body-md">{commentCount}</Typography>
+              <Typography level="body-md">{post.commentCount}</Typography>
             </StyledIconButton>
             {onEditClick && onDeleteClick && user?._id === post.userId && (
               <>
@@ -123,5 +115,5 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
       </div>
     </ContentCard>
   );
-};
+});
 export {PostItem};

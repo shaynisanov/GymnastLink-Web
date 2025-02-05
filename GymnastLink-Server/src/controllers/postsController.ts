@@ -2,6 +2,7 @@ import {Request, Response} from 'express';
 import {BaseController} from './baseController';
 import {IPost, postModel} from '../models/postsModel';
 import {RequestWithUserId} from '../types/request';
+import {commentModel} from '../models/commentsModel';
 
 class PostsController extends BaseController<IPost> {
   constructor() {
@@ -12,13 +13,25 @@ class PostsController extends BaseController<IPost> {
     const userId = req.query.userId;
 
     try {
+      let posts;
+
       if (userId) {
-        const items = await this.model.find({userId});
-        res.send(items);
+        posts = await this.model.find({userId});
       } else {
-        const items = await this.model.find();
-        res.send(items);
+        posts = await this.model.find();
       }
+
+      const postsWithCommentCount = await Promise.all(
+        posts.map(async (item) => {
+          const commentCount = await commentModel.countDocuments({
+            postId: item._id,
+          });
+
+          return {...item.toObject(), commentCount};
+        })
+      );
+
+      res.send(postsWithCommentCount);
     } catch (error) {
       res.status(400).send(error);
     }

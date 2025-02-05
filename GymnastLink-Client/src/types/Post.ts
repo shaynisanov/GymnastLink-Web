@@ -1,11 +1,14 @@
-interface Post {
-  _id: string;
+interface PostRequest {
   content: string;
   imageUrl: string | null;
   userId: string;
   createdTime: string;
-  likes: string[];
 }
 
-type PostRequest = Omit<Post, '_id' | 'likes'>;
+interface Post extends PostRequest {
+  _id: string;
+  likes: string[];
+  commentCount: number;
+}
+
 export type {Post, PostRequest};

@@ -1,37 +1,40 @@
+@use "common.module";
+
 .container {
   display: flex;
+  flex-direction: column;
+  gap: 16px;
 
-  .divider {
-    gap: 16px;
-  }
-
-  .gridItem {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    height: calc(100vh - 80px);
-  }
-
-  .listItem {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 53px;
+  .grid {
+    height: calc(100vh - 190px);
   }
 
   .commentContent {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    height: 100%;
   }
 
-  .button {
-    align-self: flex-end;
+  .postGridItem {
+    @extend .gridItem;
+    display: flex;
+    overflow: auto;
+    min-height: 0;
+    max-height: 100%;
+
+    .input {
+      border-radius: 12px;
+    }
+
+    .addButton {
+      margin-right: 1.5px;
+    }
   }
 
   .returnButton {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
+    justify-self: flex-end;
+    width: max-content;
+    margin-top: 8px;
   }
 }
