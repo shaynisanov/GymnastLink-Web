@@ -1,5 +1,5 @@
 import {AxiosError} from 'axios';
-import {FC} from 'react';
+import {FC, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
@@ -9,10 +9,11 @@ import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
 import {ClientRoutes} from '@enums/clientRoutes';
 // @ts-ignore
+import GoogleIcon from '@assets/Google-logo.svg?react';
 import {useUserContext} from '@contexts/UserContext';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@hooks/useMutation';
-import {CredentialResponse, GoogleLogin} from '@react-oauth/google';
+import {CredentialResponse, GoogleLogin, useGoogleLogin} from '@react-oauth/google';
 import {googleSignin, registerUser, userLogin} from '@services/authApi';
 import {UserLoginForm, loginSchema} from './form';
 import styles from './styles.module.scss';
@@ -50,21 +51,26 @@ const LoginForm: FC = () => {
     }
   };
 
-  const googleResponseMessage = async (credentialResponse: CredentialResponse) => {
+  const onGoogleLoginSuccess = async (credentialResponse: CredentialResponse) => {
     try {
       const user = await googleSignin(credentialResponse);
       setUser(user);
       navigate(ClientRoutes.UPDATES);
-      
-      toast.success(`Welcome back, ${user.userName}`);
+
+      toast.success(`Welcome, ${user.userName}`);
     } catch (e) {
       toast.error(`Error logging in: ${(e as AxiosError)?.response?.data}`);
     }
   };
 
-  const googleErrorMessage = () => {
+  const onGoogleLoginError = useCallback(() => {
     toast.error('Error logging in');
-  };
+  }, [toast]);
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+    onError: onGoogleLoginError,
+  });
 
   return (
     <div className={styles.container}>
@@ -84,7 +90,7 @@ const LoginForm: FC = () => {
         placeholder="Enter your password"
       />
       <div className={styles.actionsContainer}>
-        <GoogleLogin onSuccess={googleResponseMessage} onError={googleErrorMessage} />
+        <GoogleLogin onSuccess={onGoogleLoginSuccess} onError={onGoogleLoginError} />
         <div className={styles.loginRegister}>
           <StyledButton disabled={!isValid} loading={isRegistering} onClick={handleSubmit(handleRegistration)}>
             Register

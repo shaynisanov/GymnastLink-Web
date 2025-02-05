@@ -16,25 +16,25 @@ import '@styles/index.module.scss';
 import {theme} from './Theme';
 
 createRoot(document.getElementById('root')!).render(
-    <GoogleOAuthProvider clientId="1070493279650-fdhbigfkh36sbo7tig40j34cifj0j007.apps.googleusercontent.com">
-        <StrictMode>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <BrowserRouter>
-                    <UserProvider>
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/" element={<Layout />}>
-                                <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
-                                <Route path={ClientRoutes.COMMENTS} element={<Comments />} />
-                                <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
-                                <Route path={ClientRoutes.PROFILE} element={<Profile />} />
-                            </Route>
-                        </Routes>
-                        <ToastContainer position="bottom-left" />
-                    </UserProvider>
-                </BrowserRouter>
-            </ThemeProvider>
-        </StrictMode>
-    </GoogleOAuthProvider>,
+  <GoogleOAuthProvider clientId="1070493279650-fdhbigfkh36sbo7tig40j34cifj0j007.apps.googleusercontent.com">
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <UserProvider>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/" element={<Layout />}>
+                <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
+                <Route path={ClientRoutes.COMMENTS} element={<Comments />} />
+                <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
+                <Route path={ClientRoutes.PROFILE} element={<Profile />} />
+              </Route>
+            </Routes>
+            <ToastContainer position="bottom-left" />
+          </UserProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </StrictMode>
+  </GoogleOAuthProvider>,
 );

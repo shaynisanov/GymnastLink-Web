@@ -6,7 +6,7 @@ interface UseMutationResult<T> {
   trigger: (...args: any[]) => Promise<T>;
 }
 
-const useMutation = <T,>(mutationFunction: (...args: any[]) => Promise<T>): UseMutationResult<T> => {
+const useMutation = <T, >(mutationFunction: (...args: any[]) => Promise<T>): UseMutationResult<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
