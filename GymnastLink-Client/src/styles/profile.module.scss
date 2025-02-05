@@ -1,0 +1,15 @@
+@use "common.module";
+
+.container {
+  display: flex;
+}
+
+.profileGridItem {
+  @extend .gridItem;
+  justify-content: space-between;
+
+  .logoutButton {
+    width: max-content;
+  }
+
+}

@@ -13,16 +13,15 @@ interface Props {
 }
 
 const WorkoutList: FC<Props> = ({workouts, showLoading, onWorkoutClick}) => (
-  <ContentCard>
-    <div className={styles.container}>
-      {showLoading
-        ? Array.from({length: 5}).map((_, index) => <WorkoutItemSkeleton key={index} />)
-        : workouts
-            ?.sort((a, b) => compareDesc(a.createdTime, b.createdTime))
-            .map((workout) => (
-              <WorkoutItem workout={workout} key={workout._id} onClick={() => onWorkoutClick(workout)} />
-            ))}
-    </div>
+  <ContentCard className={styles.container}>
+    {showLoading
+      ? Array.from({length: 5}).map((_, index) => <WorkoutItemSkeleton key={index} />)
+      : workouts
+        .filter((workout) => !!workout._id && !!workout.createdTime)
+        .sort((a, b) => compareDesc(a.createdTime!, b.createdTime!))
+        .map((workout) => (
+          <WorkoutItem workout={workout} key={workout._id} onClick={() => onWorkoutClick(workout)} />
+        ))}
   </ContentCard>
 );
 

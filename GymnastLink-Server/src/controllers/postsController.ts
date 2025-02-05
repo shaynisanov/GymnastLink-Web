@@ -8,11 +8,11 @@ class PostsController extends BaseController<IPost> {
   }
 
   async getAll(req: Request, res: Response) {
-    const filter = req.query.filter;
+    const userId = req.query.userId;
 
     try {
-      if (filter) {
-        const items = await this.model.find({userId: filter});
+      if (userId) {
+        const items = await this.model.find({userId});
         res.send(items);
       } else {
         const items = await this.model.find();

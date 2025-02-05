@@ -8,6 +8,12 @@ const CardStyle = styled('div')({
   borderRadius: 16,
 });
 
-const ContentCard = memo<PropsWithChildren>(({children}) => <CardStyle>{children}</CardStyle>);
+interface Props extends PropsWithChildren {
+  className?: string;
+  onClick?: () => void;
+}
+
+const ContentCard = memo<Props>(({className, onClick, children}) =>
+  <CardStyle className={className} onClick={onClick}>{children}</CardStyle>);
 
 export {ContentCard};

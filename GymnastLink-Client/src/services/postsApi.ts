@@ -8,6 +8,12 @@ const getAllPosts = async () => {
   return response.data;
 };
 
+const getUserPosts = async (userId?: string) => {
+    const response = await axiosInstance.get<Post[]>(`/${ServerRoutes.POSTS}`, {params: userId});
+
+    return response.data;
+}
+
 const getPostById = async (postId: string) => {
   const response = await axiosInstance.get<Post>(`/${ServerRoutes.POSTS}/${postId}`);
 
@@ -30,4 +36,4 @@ const deletePost = async (postId: string) => {
   await axiosInstance.delete(`/${ServerRoutes.POSTS}/${postId}`);
 };
 
-export {getAllPosts, getPostById, createNewPost, updatePost, deletePost};
+export {getAllPosts, getUserPosts, getPostById, createNewPost, updatePost, deletePost};

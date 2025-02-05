@@ -20,7 +20,7 @@ interface Props {
 
 const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   const {user} = useUserContext();
-  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
+  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, post.userId);
 
   const onEditButtonClick = useCallback(() => {
     onEditClick(post);

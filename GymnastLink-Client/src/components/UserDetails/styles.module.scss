@@ -1,0 +1,11 @@
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .detailsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}

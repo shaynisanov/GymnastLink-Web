@@ -1,7 +1,6 @@
-.container {
-  height: 72vh;
-  overflow-y: auto;
+.gridItem {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  height: calc(100vh - 80px);
 }
