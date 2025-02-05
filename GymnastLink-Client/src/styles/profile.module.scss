@@ -7,9 +7,14 @@
 .profileGridItem {
   @extend .gridItem;
   justify-content: space-between;
+  
+  .profile {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
   .logoutButton {
     width: max-content;
   }
-
 }

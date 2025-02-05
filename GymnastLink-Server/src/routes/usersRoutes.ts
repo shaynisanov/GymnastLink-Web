@@ -55,4 +55,10 @@ router.get(
   usersController.getUserById.bind(usersController)
 );
 
+router.put(
+  '/profile-picture',
+  authMiddleware,
+  usersController.updateProfileImage.bind(usersController)
+);
+
 export {router as userRouter};
