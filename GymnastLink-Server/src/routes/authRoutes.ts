@@ -2,7 +2,7 @@ import {Router} from 'express';
 import {
   authMiddleware,
   getCurrentUserData,
-  googleSignin,
+  googleLogin,
   login,
   logout,
   refreshUserToken,
@@ -222,9 +222,9 @@ router.get('/user-data', authMiddleware, getCurrentUserData);
 
 /**
  * @swagger
- * /auth/google-signin:
+ * /auth/google-login:
  *   post:
- *     summary: User login with google
+ *     summary: User login with Google
  *     description: Authenticate user and return tokens
  *     tags: [Auth]
  *     requestBody:
@@ -245,6 +245,6 @@ router.get('/user-data', authMiddleware, getCurrentUserData);
  *       500:
  *         description: Server error
  */
-router.post('/google-signin', googleSignin);
+router.post('/google-login', googleLogin);
 
 export {router as authRouter};

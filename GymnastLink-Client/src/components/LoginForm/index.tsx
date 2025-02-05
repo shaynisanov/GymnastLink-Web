@@ -8,13 +8,11 @@ import {Typography} from '@mui/joy';
 import {StyledButton} from '@components/common/StyledButton';
 import {FormInput} from '@components/common/input/FormInput';
 import {ClientRoutes} from '@enums/clientRoutes';
-// @ts-ignore
-import GoogleIcon from '@assets/Google-logo.svg?react';
 import {useUserContext} from '@contexts/UserContext';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation} from '@hooks/useMutation';
-import {CredentialResponse, GoogleLogin, useGoogleLogin} from '@react-oauth/google';
-import {googleSignin, registerUser, userLogin} from '@services/authApi';
+import {CredentialResponse, GoogleLogin} from '@react-oauth/google';
+import {googleLogin, registerUser, userLogin} from '@services/authApi';
 import {UserLoginForm, loginSchema} from './form';
 import styles from './styles.module.scss';
 
@@ -53,7 +51,7 @@ const LoginForm: FC = () => {
 
   const onGoogleLoginSuccess = async (credentialResponse: CredentialResponse) => {
     try {
-      const user = await googleSignin(credentialResponse);
+      const user = await googleLogin(credentialResponse);
       setUser(user);
       navigate(ClientRoutes.UPDATES);
 
@@ -65,12 +63,7 @@ const LoginForm: FC = () => {
 
   const onGoogleLoginError = useCallback(() => {
     toast.error('Error logging in');
-  }, [toast]);
-
-  const handleGoogleLogin = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
-    onError: onGoogleLoginError,
-  });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -90,7 +83,14 @@ const LoginForm: FC = () => {
         placeholder="Enter your password"
       />
       <div className={styles.actionsContainer}>
-        <GoogleLogin onSuccess={onGoogleLoginSuccess} onError={onGoogleLoginError} />
+        <div className={styles.googleLogin}>
+          <GoogleLogin
+            theme="filled_black"
+            shape="pill"
+            onSuccess={onGoogleLoginSuccess}
+            onError={onGoogleLoginError}
+          />
+        </div>
         <div className={styles.loginRegister}>
           <StyledButton disabled={!isValid} loading={isRegistering} onClick={handleSubmit(handleRegistration)}>
             Register
@@ -99,8 +99,7 @@ const LoginForm: FC = () => {
             disabled={!isValid}
             loading={isLoggingIn}
             onClick={handleSubmit(handleLogin)}
-            startDecorator={<LoginRounded />}
-          >
+            startDecorator={<LoginRounded />}>
             Login
           </StyledButton>
         </div>

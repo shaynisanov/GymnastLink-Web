@@ -9,6 +9,10 @@
     gap: 16px;
     justify-content: space-between;
 
+    .googleLogin {
+      direction: rtl;
+    }
+
     .loginRegister {
       display: flex;
       gap: 8px;
