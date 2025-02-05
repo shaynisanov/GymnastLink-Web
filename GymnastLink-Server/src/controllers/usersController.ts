@@ -32,7 +32,7 @@ class UsersController extends BaseController<IUser> {
 
   async updateProfileImage(req: RequestWithUserId, res: Response) {
     try {
-      const updatedUser = await userModel.updateOne(
+      const updatedUser = await userModel.findOneAndUpdate(
         {_id: req.body.userId},
         {$set: {profileImageUrl: req.body.imageUrl}},
         {new: true}

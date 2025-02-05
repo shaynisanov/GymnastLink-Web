@@ -1,13 +1,13 @@
-import {getCurrentUserData} from '@services/authApi';
 import Cookies from 'js-cookie';
-import {FC, PropsWithChildren, createContext, useContext, useEffect, useState} from 'react';
+import {Dispatch, FC, PropsWithChildren, SetStateAction, createContext, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {LoggedUser} from '@customTypes/User';
 import {ClientRoutes} from '@enums/clientRoutes';
+import {getCurrentUserData} from '@services/authApi';
 
 interface UserContextType {
   user: LoggedUser | null;
-  setUser: (user: LoggedUser | null) => void;
+  setUser: Dispatch<SetStateAction<LoggedUser | null>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -20,7 +20,7 @@ const UserProvider: FC<PropsWithChildren> = ({children}) => {
   useEffect(() => {
     if (token) {
       if (!user) {
-        getCurrentUserData().then((userData) => {
+        getCurrentUserData().then(userData => {
           setUser(userData);
 
           if (location.pathname === '/') {
