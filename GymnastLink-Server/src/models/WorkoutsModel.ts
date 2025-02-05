@@ -1,19 +1,21 @@
 import {model, Schema, Types} from 'mongoose';
 
-interface IPost {
+interface IWorkout {
+  title: string;
   content: string;
-  imageUrl: string | null;
   userId: Types.ObjectId;
   createdTime: string;
-  likes: [Types.ObjectId];
 }
 
-const postSchema = new Schema<IPost>({
+const workoutSchema = new Schema<IWorkout>({
+  title: {
+    type: String,
+    required: true,
+  },
   content: {
     type: String,
     required: true,
   },
-  imageUrl: String,
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'Users',
@@ -23,14 +25,9 @@ const postSchema = new Schema<IPost>({
     type: String,
     required: true,
   },
-  likes: {
-    type: [Schema.Types.ObjectId],
-    ref: 'Users',
-    default: [],
-  },
 });
 
-const postModel = model('Posts', postSchema);
+const workoutModel = model('Workouts', workoutSchema);
 
-export type {IPost};
-export {postModel};
+export type {IWorkout as IWorkout};
+export {workoutModel as workoutModel};

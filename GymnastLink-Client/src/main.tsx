@@ -10,6 +10,7 @@ import Login from '@pages/Login';
 import Profile from '@pages/Profile';
 import Updates from '@pages/Updates';
 import Workouts from '@pages/Workouts';
+import Comments from '@pages/Comments';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
@@ -25,7 +26,8 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<Login />} />
               <Route path="/" element={<Layout />}>
                 <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
-                <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
+                  <Route path={ClientRoutes.COMMENTS} element={<Comments />} />
+                  <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
             </Routes>

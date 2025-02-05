@@ -2,7 +2,7 @@ import {memo} from 'react';
 import {Skeleton} from '@mui/joy';
 import styles from './styles.module.scss';
 
-const PostUserSkeleton = memo(() => (
+const UserSkeleton = memo(() => (
   <div className={styles.container}>
     <Skeleton variant="circular" animation="wave" width={45} height={45} />
     <div className={styles.skeletonDetails}>
@@ -11,4 +11,4 @@ const PostUserSkeleton = memo(() => (
     </div>
   </div>
 ));
-export {PostUserSkeleton};
+export {UserSkeleton};

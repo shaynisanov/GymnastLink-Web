@@ -104,4 +104,60 @@ router.post(
   commentsController.create.bind(commentsController)
 );
 
+/**
+ * @swagger
+ * /comments/count:
+ *  get:
+ *   summary: Get comment count by post ID
+ *   description: Retrieve the number of comments that belong to a post
+ *   tags: [Comments]
+ *   parameters:
+ *     - in: query
+ *       name: postId
+ *       schema:
+ *         type: string
+ *       required: true
+ *       description: The ID of the post whose comments are to be counted
+ *   responses:
+ *     200:
+ *       description: Comment count retrieved successfully
+ *     400:
+ *       description: Bad request (missing or invalid data)
+ *     500:
+ *       description: Server error
+ */
+router.get(
+  '/count',
+  authMiddleware,
+  commentsController.getCommentCount.bind(commentsController)
+);
+
+/**
+ * @swagger
+ * /comments/:
+ *   delete:
+ *     summary: Delete comments by post ID
+ *     description: Delete all comments that belong to a post
+ *     tags: [Comments]
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the post whose comments are to be deleted
+ *     responses:
+ *       200:
+ *         description: Comments deleted successfully
+ *       404:
+ *         description: Post not found
+ *       500:
+ *         description: Server error
+ */
+router.delete(
+  '/',
+  authMiddleware,
+  commentsController.deleteCommentsByPostId.bind(commentsController)
+);
+
 export {router as commentRouter};

@@ -90,6 +90,14 @@ describe('Posts Tests', () => {
     expect(response.body.content).toBe('Updated test content');
     expect(response.body.createdTime).toBeDefined();
   });
+  
+  test('like and unlike post', async () => {
+    const response = await request(app)
+      .post(`/posts/like/${postId}`)
+      .set('Authorization', `Bearer ${userAccessToken}`);
+
+    expect(response.statusCode).toBe(200);
+  });
 
   test('delete post', async () => {
     const response = await request(app)
@@ -98,6 +106,7 @@ describe('Posts Tests', () => {
 
     expect(response.statusCode).toBe(200);
   });
+
 
   test('fail to create post without authorization', async () => {
     const response = await request(app).post('/posts').send({
@@ -128,5 +137,14 @@ describe('Posts Tests', () => {
       .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(404);
+  });
+
+  test('fail to like and unlike post without authorization', async () => {
+    const response = await request(app).post(`/posts/like/${postId}`).send({
+      title: 'Unauthorized Post',
+      content: 'This post should not be liked or unliked',
+    });
+
+    expect(response.statusCode).toBe(401);
   });
 });

@@ -9,6 +9,7 @@ import 'dotenv/config';
 import {setupSwagger} from './swaggerConfig';
 import {authRouter} from './routes/authRoutes';
 import {filesRouter} from './routes/filesRoute';
+import {workoutRouter} from './routes/workoutsRoutes';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/comments', commentRouter);
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/files', filesRouter);
+app.use('/workouts', workoutRouter);
 
 setupSwagger(app);
 
