@@ -73,7 +73,7 @@ const Profile: FC = () => {
       </Grid>
       <Grid xs={7} className={styles.gridItem}>
         <Typography level="h2">Your Posts</Typography>
-        <PostList posts={usersPosts} showLoading={showPostLoading} onEditClick={() => {}} onDeleteClick={() => {}} />
+        <PostList posts={usersPosts} showLoading={showPostLoading} />
       </Grid>
     </Grid>
   );

@@ -8,8 +8,8 @@ import styles from './styles.module.scss';
 interface Props {
   posts: Post[];
   showLoading: boolean;
-  onEditClick: (post: Post) => void;
-  onDeleteClick: (postId: string) => void;
+  onEditClick?: (post: Post) => void;
+  onDeleteClick?: (postId: string) => void;
 }
 
 const PostList: FC<Props> = ({posts, showLoading, ...props}) => (
@@ -18,7 +18,7 @@ const PostList: FC<Props> = ({posts, showLoading, ...props}) => (
       ? Array.from({length: 5}).map((_, index) => <PostItemSkeleton key={index} />)
       : posts
           ?.sort((a, b) => compareDesc(a.createdTime, b.createdTime))
-          .map((post) => <PostItem post={post} key={post._id} {...props} />)}
+          .map(post => <PostItem post={post} key={post._id} {...props} />)}
   </div>
 );
 
