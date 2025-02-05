@@ -26,29 +26,5 @@
         overflow-wrap: anywhere;
       }
     }
-
-    .actions {
-      display: flex;
-      gap: 8px;
-      justify-self: flex-end;
-      align-items: center;
-    }
-  }
-
-  .detailsContentWithImage {
-    @extend .detailsContent;
-    max-width: 60%;
-  }
-
-  .postImage {
-    width: 40%;
-    justify-self: flex-end;
-    align-content: center;
-
-    > img {
-      width: 100%;
-      border-radius: 8px;
-      object-fit: cover;
-    }
   }
 }

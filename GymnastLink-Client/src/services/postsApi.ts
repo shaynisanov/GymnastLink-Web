@@ -36,4 +36,10 @@ const deletePost = async (postId: string) => {
   await axiosInstance.delete(`/${ServerRoutes.POSTS}/${postId}`);
 };
 
-export {getAllPosts, getUserPosts, getPostById, createNewPost, updatePost, deletePost};
+const handleLike = async (postId: string) => {
+  const response = await axiosInstance.post(`/${ServerRoutes.POSTS}/like/${postId}`);
+
+  return response.data;
+};
+
+export {getAllPosts, getUserPosts, getPostById, createNewPost, updatePost, deletePost, handleLike};

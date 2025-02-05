@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import {UserLoginForm} from '@components/LoginForm/form';
 import {LoggedUser} from '@customTypes/User';
 import {ServerRoutes} from '@enums/serverRoutes';
+import {CredentialResponse} from '@react-oauth/google';
 import {axiosInstance} from '@services/axiosConfig';
 import {parseExpirationInDays} from '@utils/dateUtils';
 
@@ -40,4 +41,15 @@ const getCurrentUserData = async () => {
   return response.data;
 };
 
-export {registerUser, userLogin, userLogout, getCurrentUserData};
+const googleSignin = async (credentialResponse: CredentialResponse) => {
+  const response = await axios.post<LoggedUser>(`${BASE_URL}/${ServerRoutes.AUTH}/google-signin`, {
+    credential: credentialResponse.credential,
+  });
+  
+  Cookies.set('access_token', response.data.accessToken, {expires: parseExpirationInDays(JWT_TOKEN_EXPIRES)});
+  Cookies.set('refresh_token', response.data.refreshToken);
+
+  return response.data;
+};
+
+export {registerUser, userLogin, userLogout, getCurrentUserData, googleSignin};

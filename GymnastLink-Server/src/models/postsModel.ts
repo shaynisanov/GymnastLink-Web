@@ -5,6 +5,7 @@ interface IPost {
   imageUrl: string | null;
   userId: Types.ObjectId;
   createdTime: string;
+  likes: [Types.ObjectId];
 }
 
 const postSchema = new Schema<IPost>({
@@ -21,6 +22,11 @@ const postSchema = new Schema<IPost>({
   createdTime: {
     type: String,
     required: true,
+  },
+  likes: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Users',
+    default: [],
   },
 });
 
