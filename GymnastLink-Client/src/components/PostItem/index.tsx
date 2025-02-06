@@ -49,7 +49,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   const isLiked = useMemo(() => (user ? likes.includes(user._id) : false), [likes, user]);
 
   const onCommentsButtonClick = useCallback(() => {
-    navigate(ClientRoutes.COMMENTS, {state: {post}});
+    navigate(`${ClientRoutes.POST}/${post._id}${ClientRoutes.COMMENTS}`);
   }, [navigate, post]);
 
   const onEditButtonClick = useCallback(() => {

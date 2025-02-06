@@ -1,10 +1,12 @@
 import {FC, useCallback, useEffect, useState} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {useParams} from 'react-router';
+import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {Add, ArrowBack} from '@mui/icons-material';
 import {Grid, Typography} from '@mui/joy';
 import CommentList from '@components/CommentList';
 import {PostItem} from '@components/PostItem';
+import {PostItemSkeleton} from '@components/PostItem/PostItemSkeleton';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledInput} from '@components/common/input/StyledInput';
 import {Comment} from '@customTypes/Comment';
@@ -14,26 +16,34 @@ import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
 import {createNewComment, getAllComments} from '@services/commentsApi';
+import {getPostById} from '@services/postsApi';
 import styles from '@styles/comments.module.scss';
 
 const Comments: FC = () => {
   const {user} = useUserContext();
-  const location = useLocation();
   const navigate = useNavigate();
+  const {postId} = useParams();
 
-  const [post, setPost] = useState<Post>(location.state?.post);
-  const {data: initialComments = [], isFetching} = useFetch(getAllComments, post._id);
+  const {data: initialPost, isFetching: isFetchingPost} = useFetch(getPostById, postId?.toString());
+  const {data: initialComments = [], isFetching: isFetchingComments} = useFetch(getAllComments, postId?.toString());
+
+  const [post, setPost] = useState<Post>();
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [commentContent, setCommentContent] = useState<string>('');
 
-  const showCommentLoading = useLoadingWithDelay(isFetching);
+  const showPostLoading = useLoadingWithDelay(isFetchingPost);
+  const showCommentLoading = useLoadingWithDelay(isFetchingComments);
 
   useEffect(() => {
     setComments(initialComments);
   }, [initialComments]);
 
+  useEffect(() => {
+    setPost(initialPost);
+  }, [initialPost]);
+
   const handleSaveComment = async () => {
-    if (user) {
+    if (user && post) {
       try {
         const newComment = await createNewComment({
           content: commentContent,
@@ -42,12 +52,12 @@ const Comments: FC = () => {
           createdTime: new Date().toISOString(),
         });
         setComments(prevState => [newComment, ...prevState]);
-        setPost(prevState => ({...prevState, commentCount: prevState.commentCount + 1}));
+        setPost(prevState => prevState ? ({...prevState, commentCount: prevState.commentCount + 1}) : undefined);
 
         setCommentContent('');
         toast.success('Comment was added');
       } catch (e) {
-        toast.error("We couldn't add your new comment");
+        toast.error('We couldn\'t add your new comment');
       }
     }
   };
@@ -61,7 +71,7 @@ const Comments: FC = () => {
       <Typography level="h2">What people say about this post</Typography>
       <Grid container spacing="32px" className={styles.grid}>
         <Grid xs={7} className={styles.postGridItem}>
-          <PostItem post={post} />
+          {!post || showPostLoading ? <PostItemSkeleton /> : <PostItem post={post} />}
           <StyledInput
             placeholder="Add a comment..."
             value={commentContent}

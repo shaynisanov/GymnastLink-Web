@@ -26,7 +26,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/" element={<Login />} />
               <Route path="/" element={<Layout />}>
                 <Route index path={ClientRoutes.UPDATES} element={<Updates />} />
-                <Route path={ClientRoutes.COMMENTS} element={<Comments />} />
+                <Route path={`${ClientRoutes.POST}/:postId${ClientRoutes.COMMENTS}`} element={<Comments />} />
                 <Route path={ClientRoutes.WORKOUTS} element={<Workouts />} />
                 <Route path={ClientRoutes.PROFILE} element={<Profile />} />
               </Route>
