@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {ServerRoutes} from '@enums/serverRoutes';
+import {parseExpirationInDays} from '@utils/dateUtils';
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
+const JWT_TOKEN_EXPIRES = import.meta.env.VITE_JWT_TOKEN_EXPIRES;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -39,7 +41,7 @@ axiosInstance.interceptors.response.use(
           const response = await axios.post(`${BASE_URL}/${ServerRoutes.AUTH}/refresh-token`, {refreshToken});
 
           const newAccessToken = response.data.accessToken;
-          Cookies.set('access_token', newAccessToken);
+          Cookies.set('access_token', newAccessToken, {expires: parseExpirationInDays(JWT_TOKEN_EXPIRES)});
           Cookies.set('refresh_token', response.data.refreshToken);
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
