@@ -18,20 +18,19 @@ const UserProvider: FC<PropsWithChildren> = ({children}) => {
   const token = Cookies.get('access_token');
 
   useEffect(() => {
-    if (token) {
-      if (!user) {
-        getCurrentUserData().then(userData => {
-          setUser(userData);
+    const fetchUserData = async () => {
+      if (token) {
+        const userData = await getCurrentUserData();
+        setUser(userData);
 
-          if (location.pathname === '/') {
-            navigate(ClientRoutes.UPDATES);
-          }
-        });
-      } else if (location.pathname === '/') {
-        navigate(ClientRoutes.UPDATES);
+        if (location.pathname === '/') {
+          navigate(ClientRoutes.UPDATES);
+        }
       }
-    }
-  }, [location.pathname]);
+    };
+
+    fetchUserData();
+  }, [token, navigate]);
 
   return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>;
 };
