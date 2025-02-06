@@ -50,7 +50,7 @@ const Updates: FC = () => {
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
-        setPosts((prevState) => [newPost, ...prevState]);
+        setPosts((prevState) => [{...newPost, user}, ...prevState]);
         toast.success('Your new post was added');
       } catch (e) {
         toast.error("We couldn't add your new post");
@@ -68,7 +68,7 @@ const Updates: FC = () => {
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
-        setPosts((prevState) => [updatedPost, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
+        setPosts((prevState) => [{...updatedPost, user}, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
         setEditedPost(undefined);
         toast.success('Post was successfully updated');
       } catch (e) {
