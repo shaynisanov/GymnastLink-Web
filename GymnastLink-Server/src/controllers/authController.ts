@@ -111,6 +111,7 @@ const login = async (req: Request, res: Response) => {
       userName: user.userName,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
+      profileImageUrl: user.profileImageUrl,
       _id: user._id,
     });
   } catch (err) {

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {toast} from 'react-toastify';
 import {LogoutRounded} from '@mui/icons-material';
@@ -16,16 +16,23 @@ import {getUserPosts} from '@services/postsApi';
 import {updateUserProfilePicture} from '@services/usersApi';
 import {getUserWorkouts} from '@services/workoutApi';
 import styles from '@styles/profile.module.scss';
+import {Post} from '@customTypes/Post';
 
 const Profile: FC = () => {
   const navigate = useNavigate();
   const {user, setUser} = useUserContext();
   const {trigger: logout, isLoading: isLoggingOut} = useMutation(userLogout);
-  const {data: usersPosts = [], isFetching: isFetchingPosts} = useFetch(getUserPosts, user?._id);
+  const {data: initialUserPosts = [], isFetching: isFetchingPosts} = useFetch(getUserPosts, user?._id);
   const {data: userWorkouts = [], isFetching: isFetchingWorkouts} = useFetch(getUserWorkouts);
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
 
   const showPostLoading = useLoadingWithDelay(isFetchingPosts);
   const showUserLoading = useLoadingWithDelay(isFetchingPosts || isFetchingWorkouts);
+
+  useEffect(() => {
+    setUserPosts(initialUserPosts);
+  }, [initialUserPosts]);
+
 
   const handleUpdateProfilePicture = async (profilePicture: File) => {
     try {
@@ -33,9 +40,17 @@ const Profile: FC = () => {
       const updatedUser = await updateUserProfilePicture(result.url);
       setUser(updatedUser);
 
+      setUserPosts(currPosts => currPosts.map(post => ({
+        ...post,
+        user: {
+          ...post.user,
+          profileImageUrl: updatedUser.profileImageUrl,
+        },
+      })));
+
       toast.success('Profile picture was successfully updated');
     } catch (e) {
-      toast.error("We couldn't upload your image");
+      toast.error('We couldn\'t upload your image');
     }
   };
 
@@ -57,7 +72,7 @@ const Profile: FC = () => {
           <Typography level="h2">Your Profile</Typography>
           <UserDetails
             user={user}
-            postCount={usersPosts.length}
+            postCount={initialUserPosts.length}
             workoutCount={userWorkouts.length}
             isLoading={showUserLoading}
             onUpdateProfilePicture={handleUpdateProfilePicture}
@@ -73,7 +88,7 @@ const Profile: FC = () => {
       </Grid>
       <Grid xs={7} className={styles.gridItem}>
         <Typography level="h2">Your Posts</Typography>
-        <PostList posts={usersPosts} showLoading={showPostLoading} />
+        <PostList posts={userPosts} showLoading={showPostLoading} />
       </Grid>
     </Grid>
   );

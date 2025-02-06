@@ -12,13 +12,10 @@ import {Typography} from '@mui/joy';
 import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
-import {UserSkeleton} from '@components/common/UserSkeleton';
 import {Post} from '@customTypes/Post';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
-import {useFetch} from '@hooks/useFetch';
 import {handleLike} from '@services/postsApi';
-import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
@@ -32,7 +29,6 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   const navigate = useNavigate();
   const {user} = useUserContext();
   const [likes, setLikes] = useState(post.likes);
-  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, post.userId);
 
   const handleLikeButton = async () => {
     if (user) {
@@ -68,19 +64,15 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
     <ContentCard>
       <div className={styles.container}>
         <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
-          {isFetchingUser || !creatingUser ? (
-            <UserSkeleton />
-          ) : (
             <div className={styles.header}>
-              <UserAvatar user={creatingUser} />
+              <UserAvatar user={post.user} />
               <div>
                 <Typography level="body-lg" fontWeight={700}>
-                  {`@${creatingUser.userName}`}
+                  {`@${post.user.userName}`}
                 </Typography>
                 <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
               </div>
             </div>
-          )}
           <div className={styles.content}>
             <Typography level="body-lg" className={styles.text}>
               {post.content}
@@ -95,7 +87,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
               <ChatBubbleOutlineRounded />
               <Typography level="body-md">{post.commentCount}</Typography>
             </StyledIconButton>
-            {onEditClick && onDeleteClick && user?._id === post.userId && (
+            {onEditClick && onDeleteClick && user?._id === post.user._id && (
               <>
                 <StyledIconButton onClick={onEditButtonClick}>
                   <EditNoteRounded />

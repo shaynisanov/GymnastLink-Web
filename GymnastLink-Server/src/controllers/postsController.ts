@@ -3,6 +3,7 @@ import {BaseController} from './baseController';
 import {IPost, postModel} from '../models/postsModel';
 import {RequestWithUserId} from '../types/request';
 import {commentModel} from '../models/commentsModel';
+import {userModel} from '../models/usersModel';
 
 class PostsController extends BaseController<IPost> {
   constructor() {
@@ -21,17 +22,26 @@ class PostsController extends BaseController<IPost> {
         posts = await this.model.find();
       }
 
-      const postsWithCommentCount = await Promise.all(
+      const mappedPost = await Promise.all(
         posts.map(async (item) => {
           const commentCount = await commentModel.countDocuments({
             postId: item._id,
           });
+          const postUser = await userModel.findById(item.userId);
 
-          return {...item.toObject(), commentCount};
+          return {
+            ...item.toObject(),
+            commentCount,
+            user: {
+              id: postUser?._id.toString(),
+              userName: postUser?.userName,
+              profileImageUrl: postUser?.profileImageUrl,
+            },
+          };
         })
       );
 
-      res.send(postsWithCommentCount);
+      res.send(mappedPost);
     } catch (error) {
       res.status(400).send(error);
     }

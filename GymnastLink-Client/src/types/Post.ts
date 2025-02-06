@@ -1,7 +1,9 @@
+import {User} from '@customTypes/User';
+
 interface PostRequest {
   content: string;
   imageUrl: string | null;
-  userId: string;
+  user: User;
   createdTime: string;
 }
 
