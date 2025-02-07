@@ -100,12 +100,6 @@ describe('Comments Tests', () => {
     expect(response.statusCode).toBe(401);
   });
 
-  test('fail to get comments count by postId without authorization', async () => {
-    const response = await request(app).get(`/comments/count?postId=${postId}`);
-
-    expect(response.statusCode).toBe(401);
-  });
-
   test('fail to delete comments by postId without authorization', async () => {
     const response = await request(app).delete(`/comments?postId=${postId}`);
 

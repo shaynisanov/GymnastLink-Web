@@ -17,7 +17,7 @@ class UsersController extends BaseController<IUser> {
 
       if (user) {
         const userResponse: UserResponse = {
-          id: user._id.toString(),
+          _id: user._id.toString(),
           userName: user.userName,
           profileImageUrl: user.profileImageUrl,
         };
