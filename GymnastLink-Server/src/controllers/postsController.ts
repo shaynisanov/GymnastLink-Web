@@ -33,7 +33,7 @@ class PostsController extends BaseController<IPost> {
             ...item.toObject(),
             commentCount,
             user: {
-              id: postUser?._id.toString(),
+              _id: postUser?._id.toString(),
               userName: postUser?.userName,
               profileImageUrl: postUser?.profileImageUrl,
             },
@@ -54,14 +54,16 @@ class PostsController extends BaseController<IPost> {
       const post = await this.model.findById(id);
 
       if (post) {
-        const commentCount = await commentModel.countDocuments({postId: post._id});
+        const commentCount = await commentModel.countDocuments({
+          postId: post._id,
+        });
         const postUser = await userModel.findById(post.userId);
 
         res.send({
           ...post.toObject(),
           commentCount,
           user: {
-            id: postUser?._id.toString(),
+            _id: postUser?._id.toString(),
             userName: postUser?.userName,
             profileImageUrl: postUser?.profileImageUrl,
           },

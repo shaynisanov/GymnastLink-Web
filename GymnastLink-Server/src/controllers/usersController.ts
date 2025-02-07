@@ -47,6 +47,24 @@ class UsersController extends BaseController<IUser> {
       res.status(400).send(error);
     }
   }
+
+  async updateUserName(req: RequestWithUserId, res: Response) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate(
+        {_id: req.body.userId},
+        {$set: {userName: req.body.userName}},
+        {new: true}
+      );
+
+      if (updatedUser) {
+        res.status(200).send(updatedUser);
+      } else {
+        res.status(404).json({error: 'User not found'});
+      }
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  }
 }
 
 export default new UsersController();

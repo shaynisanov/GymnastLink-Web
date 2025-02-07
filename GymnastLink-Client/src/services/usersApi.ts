@@ -14,4 +14,10 @@ const updateUserProfilePicture = async (imageUrl: string) => {
   return response.data;
 };
 
-export {getUserById, updateUserProfilePicture};
+const updateUserName = async (userName: string) => {
+  const response = await axiosInstance.put<LoggedUser>(`/${ServerRoutes.USERS}/username`, {userName});
+
+  return response.data;
+};
+
+export {getUserById, updateUserProfilePicture, updateUserName};

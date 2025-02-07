@@ -50,7 +50,7 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
 
   const onCommentsButtonClick = useCallback(() => {
     navigate(`${ClientRoutes.POST}/${post._id}${ClientRoutes.COMMENTS}`);
-  }, [navigate, post]);
+  }, [navigate, post._id]);
 
   const onEditButtonClick = useCallback(() => {
     onEditClick?.(post);
@@ -64,15 +64,15 @@ const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
     <ContentCard>
       <div className={styles.container}>
         <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
-            <div className={styles.header}>
-              <UserAvatar user={post.user} />
-              <div>
-                <Typography level="body-lg" fontWeight={700}>
-                  {`@${post.user.userName}`}
-                </Typography>
-                <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
-              </div>
+          <div className={styles.header}>
+            <UserAvatar user={post.user} />
+            <div>
+              <Typography level="body-lg" fontWeight={700}>
+                {`@${post.user.userName}`}
+              </Typography>
+              <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
             </div>
+          </div>
           <div className={styles.content}>
             <Typography level="body-lg" className={styles.text}>
               {post.content}
