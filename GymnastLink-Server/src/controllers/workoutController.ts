@@ -31,7 +31,7 @@ class WorkoutController extends BaseController<IWorkout> {
   }
 
   async planWorkout(req: Request, res: Response) {
-    const workoutDescription = req.body;
+    const workoutDescription = req.body.description;
 
     try {
       const workoutPlanPrompt = createPrompt(workoutDescription);

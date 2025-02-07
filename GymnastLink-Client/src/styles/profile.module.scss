@@ -1,0 +1,25 @@
+@use "common.module";
+
+.container {
+  display: flex;
+}
+
+.profileGridItem {
+  @extend .gridItem;
+  justify-content: space-between;
+
+  .profile {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .bottomActions {
+    display: flex;
+    gap: 16px;
+
+    .button {
+      width: max-content;
+    }
+  }
+}

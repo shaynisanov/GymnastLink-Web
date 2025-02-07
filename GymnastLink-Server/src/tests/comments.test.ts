@@ -79,22 +79,15 @@ describe('Comments Tests', () => {
     expect(response.body[0].createdTime).toBeDefined();
   });
 
-  test('get comment count by postId', async () => {
-    const response = await request(app)
-      .get(`/comments/count?postId=${postId}`)
-      .set('Authorization', `Bearer ${userAccessToken}`);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body.count).toBe(1);
-  });
-
   test('delete comments by postId', async () => {
     const response = await request(app)
       .delete(`/comments?postId=${postId}`)
       .set('Authorization', `Bearer ${userAccessToken}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.text).toBe(`Comments for post with id ${postId} were deleted`);
+    expect(response.text).toBe(
+      `Comments for post with id ${postId} were deleted`
+    );
   });
 
   test('fail to create comment without authorization', async () => {
@@ -103,12 +96,6 @@ describe('Comments Tests', () => {
       content: 'This is a test comment without auth',
       createdTime: new Date().toISOString(),
     });
-
-    expect(response.statusCode).toBe(401);
-  });
-
-  test('fail to get comments count by postId without authorization', async () => {
-    const response = await request(app).get(`/comments/count?postId=${postId}`);
 
     expect(response.statusCode).toBe(401);
   });

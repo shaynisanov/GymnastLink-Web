@@ -1,8 +1,10 @@
 import {FC, useState} from 'react';
+import {toast} from 'react-toastify';
 import {Bolt} from '@mui/icons-material';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledTextArea} from '@components/common/input/StyledTextArea';
 import {useUserContext} from '@contexts/UserContext';
+import {useMutation} from '@hooks/useMutation';
 import styles from './styles.module.scss';
 
 interface Props {
@@ -18,14 +20,17 @@ Do 3 sets of 10 reps for each exercise with 1 minute rest between sets."`;
 
 const WorkoutAIChat: FC<Props> = ({handlePlanWorkout}) => {
   const {user} = useUserContext();
-  const [workoutDescription, setWorkoutDescription] = useState<string>('');
+  const [workoutDescription, setWorkoutDescription] = useState<string>();
+  const isValid = user && workoutDescription && workoutDescription.length > 0;
+  const {trigger: planWorkout, isLoading: isPlanningWorkout} = useMutation(handlePlanWorkout);
 
   const handleGenerateClick = async () => {
-    if (user) {
+    if (isValid) {
       try {
-        await handlePlanWorkout(workoutDescription);
+        await planWorkout(workoutDescription);
+        setWorkoutDescription('');
       } catch (e) {
-        console.error(e);
+        toast.error("We couldn't generate your workout");
       }
     }
   };
@@ -33,20 +38,20 @@ const WorkoutAIChat: FC<Props> = ({handlePlanWorkout}) => {
   return (
     <div className={styles.contentContainer}>
       <StyledTextArea
-        placeholder={PLACEHOLDER}
         value={workoutDescription}
-        onChange={(e) => setWorkoutDescription(e.target.value)}
+        placeholder={PLACEHOLDER}
+        onChange={e => setWorkoutDescription(e.target.value)}
       />
       <StyledButton
         className={styles.generateButton}
         startDecorator={<Bolt />}
+        loading={isPlanningWorkout}
         onClick={handleGenerateClick}
-        disabled={!user || !workoutDescription.trim()}
-      >
+        disabled={!isValid}>
         Generate Workout
       </StyledButton>
     </div>
   );
 };
 
-export default WorkoutAIChat;
+export {WorkoutAIChat};

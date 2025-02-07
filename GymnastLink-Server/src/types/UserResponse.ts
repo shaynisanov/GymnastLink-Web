@@ -1,5 +1,5 @@
 interface UserResponse {
-  id: string;
+  _id: string;
   userName: string;
   profileImageUrl: string | null;
 }

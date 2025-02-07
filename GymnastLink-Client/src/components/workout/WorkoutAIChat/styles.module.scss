@@ -1,0 +1,16 @@
+.contentContainer {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+
+  > div {
+    --Textarea-radius: 16px;
+  }
+
+  .generateButton {
+    width: max-content;
+    align-self: flex-end;
+  }
+}

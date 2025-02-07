@@ -1,13 +1,13 @@
-import {getCurrentUserData} from '@services/authApi';
 import Cookies from 'js-cookie';
-import {FC, PropsWithChildren, createContext, useContext, useEffect, useState} from 'react';
+import {Dispatch, FC, PropsWithChildren, SetStateAction, createContext, useContext, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router';
 import {LoggedUser} from '@customTypes/User';
 import {ClientRoutes} from '@enums/clientRoutes';
+import {getCurrentUserData} from '@services/authApi';
 
 interface UserContextType {
   user: LoggedUser | null;
-  setUser: (user: LoggedUser | null) => void;
+  setUser: Dispatch<SetStateAction<LoggedUser | null>>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -18,20 +18,19 @@ const UserProvider: FC<PropsWithChildren> = ({children}) => {
   const token = Cookies.get('access_token');
 
   useEffect(() => {
-    if (token) {
-      if (!user) {
-        getCurrentUserData().then((userData) => {
-          setUser(userData);
+    const fetchUserData = async () => {
+      if (token) {
+        const userData = await getCurrentUserData();
+        setUser(userData);
 
-          if (location.pathname === '/') {
-            navigate(ClientRoutes.UPDATES);
-          }
-        });
-      } else if (location.pathname === '/') {
-        navigate(ClientRoutes.UPDATES);
+        if (location.pathname === '/') {
+          navigate(ClientRoutes.UPDATES);
+        }
       }
-    }
-  }, [location.pathname]);
+    };
+
+    fetchUserData();
+  }, [token, navigate]);
 
   return <UserContext.Provider value={{user, setUser}}>{children}</UserContext.Provider>;
 };

@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .submitButton {
+    margin-right: 1.5px;
+  }
+}

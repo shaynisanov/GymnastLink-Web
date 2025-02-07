@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren} from 'react';
+import {FC, PropsWithChildren, ReactNode} from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import {DialogActions, DialogContent, Modal, ModalDialog, Typography, styled} from '@mui/joy';
 import {StyledButton} from '@components/common/StyledButton';
@@ -8,7 +8,6 @@ import styles from './styles.module.scss';
 
 const StyledDialog = styled(ModalDialog)({
   ...glassEffect,
-  minHeight: '50vh',
   minWidth: '40vw',
   borderRadius: 8,
   background: 'rgba(59,59,59,0.8)',
@@ -18,12 +17,11 @@ const StyledDialog = styled(ModalDialog)({
 interface Props extends PropsWithChildren {
   open: boolean;
   title: string;
-  acceptText?: string;
-  onAccept?: () => void;
+  acceptAction?: ReactNode;
   onCancel?: () => void;
 }
 
-const Popup: FC<Props> = ({open, onAccept, onCancel, title, children, acceptText}) => (
+const Popup: FC<Props> = ({open, acceptAction, onCancel, title, children}) => (
   <Modal open={open} onClose={onCancel}>
     <StyledDialog>
       <div className={styles.container}>
@@ -36,7 +34,7 @@ const Popup: FC<Props> = ({open, onAccept, onCancel, title, children, acceptText
       </div>
       <DialogContent>{children}</DialogContent>
       <DialogActions className={styles.actions}>
-        {onAccept && <StyledButton onClick={onAccept}>{acceptText}</StyledButton>}
+        {acceptAction}
         <StyledButton onClick={onCancel}>Cancel</StyledButton>
       </DialogActions>
     </StyledDialog>

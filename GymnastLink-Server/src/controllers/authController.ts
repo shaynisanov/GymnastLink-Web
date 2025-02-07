@@ -111,6 +111,7 @@ const login = async (req: Request, res: Response) => {
       userName: user.userName,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
+      profileImageUrl: user.profileImageUrl,
       _id: user._id,
     });
   } catch (err) {
@@ -266,7 +267,7 @@ const authMiddleware = async (
 };
 
 const client = new OAuth2Client();
-const googleSignin: RequestHandler = async (
+const googleLogin: RequestHandler = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -287,7 +288,7 @@ const googleSignin: RequestHandler = async (
 
       user = await userModel.create({
         email: email,
-        password: 'google-signin',
+        password: `${Math.random()}${payload?.iat}`,
         profileImageUrl: payload?.picture,
         userName,
       });
@@ -313,5 +314,5 @@ export {
   getCurrentUserData,
   refreshUserToken,
   authMiddleware,
-  googleSignin,
+  googleLogin,
 };

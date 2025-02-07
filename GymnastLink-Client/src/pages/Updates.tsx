@@ -9,9 +9,9 @@ import {Post} from '@customTypes/Post';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
+import {deleteCommentsByPostId} from '@services/commentsApi';
 import {saveNewFile} from '@services/filesApi';
 import {createNewPost, deletePost, getAllPosts, updatePost} from '@services/postsApi';
-import {deleteCommentsByPostId} from '@services/commentsApi';
 import styles from '@styles/updates.module.scss';
 
 const Updates: FC = () => {
@@ -50,7 +50,7 @@ const Updates: FC = () => {
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
-        setPosts((prevState) => [newPost, ...prevState]);
+        setPosts(prevState => [{...newPost, user}, ...prevState]);
         toast.success('Your new post was added');
       } catch (e) {
         toast.error("We couldn't add your new post");
@@ -68,7 +68,7 @@ const Updates: FC = () => {
           userId: user?._id,
           createdTime: new Date().toISOString(),
         });
-        setPosts((prevState) => [updatedPost, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
+        setPosts(prevState => [{...updatedPost, user}, ...prevState.filter(({_id}) => _id !== editedPost._id)]);
         setEditedPost(undefined);
         toast.success('Post was successfully updated');
       } catch (e) {
@@ -81,7 +81,7 @@ const Updates: FC = () => {
     try {
       await deleteCommentsByPostId(postId);
       await deletePost(postId);
-      setPosts((prevState) => prevState.filter(({_id}) => _id !== postId));
+      setPosts(prevState => prevState.filter(({_id}) => _id !== postId));
       toast.success('Post was successfully deleted');
     } catch (e) {
       toast.error("We couldn't delete your post");

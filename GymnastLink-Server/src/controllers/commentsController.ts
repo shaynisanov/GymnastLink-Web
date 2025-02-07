@@ -40,17 +40,6 @@ class CommentsController extends BaseController<IComments> {
     }
   }
 
-  async getCommentCount(req: Request, res: Response) {
-    const postId = req.query.postId;
-
-    try {
-      const count = await this.model.countDocuments({postId});
-      res.send({count});
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  }
-
   async deleteCommentsByPostId(req: Request, res: Response) {
     const postId = req.query.postId;
 

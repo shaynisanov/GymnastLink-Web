@@ -1,21 +1,20 @@
-import {FC, useCallback, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import {toast} from 'react-toastify';
 import {Grid, Typography} from '@mui/joy';
 import {Popup} from '@components/common/Popup';
-import WorkoutAIChat from '@components/workoutComponents/WorkoutAIChat';
-import WorkoutDetails from '@components/workoutComponents/WorkoutDetails';
-import WorkoutList from '@components/workoutComponents/WorkoutList';
+import {WorkoutAIChat} from '@components/workout/WorkoutAIChat';
+import WorkoutDetails from '@components/workout/WorkoutDetails';
+import WorkoutList from '@components/workout/WorkoutList';
 import {Workout} from '@customTypes/Workout';
 import {useUserContext} from '@contexts/UserContext';
 import {useFetch} from '@hooks/useFetch';
 import {useLoadingWithDelay} from '@hooks/useLoadingWithDelay';
-import {createNewWorkout, deleteWorkout, getAllByUser, planWorkout} from '@services/workoutApi';
+import {createNewWorkout, deleteWorkout, getUserWorkouts, planWorkout} from '@services/workoutApi';
 import styles from '@styles/updates.module.scss';
 
 const Workouts: FC = () => {
   const {user} = useUserContext();
-  const fetchWorkouts = useCallback(() => getAllByUser(), []);
-  const {data: initialWorkouts = [], isFetching} = useFetch(fetchWorkouts);
+  const {data: initialWorkouts = [], isFetching} = useFetch(getUserWorkouts);
   const [workouts, setWorkouts] = useState<Workout[]>(initialWorkouts);
   const [displayedWorkout, setDisplayedWorkout] = useState<Workout | null>(null);
   const showWorkoutLoading = useLoadingWithDelay(isFetching);
@@ -44,8 +43,8 @@ const Workouts: FC = () => {
           userId: user._id,
           createdTime: new Date().toISOString(),
         });
-        setWorkouts((prevState) => [newWorkout, ...prevState]);
-        onCancelworkout();
+        setWorkouts(prevState => [newWorkout, ...prevState]);
+        onCancelWorkout();
         toast.success('The workout was added');
       } catch (e) {
         toast.error("We couldn't add your new workout");
@@ -56,15 +55,15 @@ const Workouts: FC = () => {
   const handleDeleteWorkout = async (workoutId: string) => {
     try {
       await deleteWorkout(workoutId);
-      setWorkouts((prevState) => prevState.filter(({_id}) => _id !== workoutId));
-      onCancelworkout();
+      setWorkouts(prevState => prevState.filter(({_id}) => _id !== workoutId));
+      onCancelWorkout();
       toast.success('Workout was successfully deleted');
     } catch (e) {
       toast.error("We couldn't delete your workout");
     }
   };
 
-  const onCancelworkout = () => {
+  const onCancelWorkout = () => {
     setDisplayedWorkout(null);
   };
 
@@ -82,7 +81,7 @@ const Workouts: FC = () => {
         <Typography level="h2">Your workouts</Typography>
         <WorkoutList workouts={workouts} showLoading={showWorkoutLoading} onWorkoutClick={handleWorkoutClick} />
       </Grid>
-      <Popup open={!!displayedWorkout} title={displayedWorkout?.title || 'Workout Plan'} onCancel={onCancelworkout}>
+      <Popup open={!!displayedWorkout} title={displayedWorkout?.title || 'Workout Plan'} onCancel={onCancelWorkout}>
         <WorkoutDetails
           buttonText={displayedWorkout?._id ? 'Delete' : 'Save'}
           workoutDescription={displayedWorkout?.content}

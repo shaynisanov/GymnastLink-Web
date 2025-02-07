@@ -7,7 +7,7 @@ interface UseFetchResult<T> {
   error: Error | null;
 }
 
-const useFetch = <T,>(fetchFunction: (...args: any[]) => Promise<T>, params: any[] = []): UseFetchResult<T> => {
+const useFetch = <T,>(fetchFunction: (...args: any[]) => Promise<T>, ...args: any[]): UseFetchResult<T> => {
   const [data, setData] = useState<T>();
   const [isFetching, setIsFetching] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -17,7 +17,7 @@ const useFetch = <T,>(fetchFunction: (...args: any[]) => Promise<T>, params: any
     const fetchData = async () => {
       try {
         setIsFetching(true);
-        const result = await fetchFunction(...params);
+        const result = await fetchFunction(args);
 
         setData(result);
         setIsSuccess(true);
@@ -29,7 +29,7 @@ const useFetch = <T,>(fetchFunction: (...args: any[]) => Promise<T>, params: any
     };
 
     fetchData();
-  }, [fetchFunction, ...params]);
+  }, [fetchFunction, ...args]);
 
   return {data, isFetching, error, isSuccess};
 };

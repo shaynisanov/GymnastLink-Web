@@ -2,7 +2,7 @@ import {Workout, WorkoutRequest} from '@customTypes/Workout';
 import {ServerRoutes} from '@enums/serverRoutes';
 import {axiosInstance} from '@services/axiosConfig';
 
-const getAllByUser = async () => {
+const getUserWorkouts = async () => {
   const response = await axiosInstance.get<Workout[]>(`/${ServerRoutes.WORKOUTS}`);
 
   return response.data;
@@ -14,8 +14,8 @@ const createNewWorkout = async (newWorkout: WorkoutRequest) => {
   return response.data;
 };
 
-const planWorkout = async (workoutDescription: string) => {
-  const response = await axiosInstance.post<Workout>(`/${ServerRoutes.WORKOUTS}/plan`, workoutDescription);
+const planWorkout = async (description: string) => {
+  const response = await axiosInstance.post<Workout>(`/${ServerRoutes.WORKOUTS}/plan`, {description});
 
   return response.data;
 };
@@ -24,4 +24,4 @@ const deleteWorkout = async (workoutId: string) => {
   await axiosInstance.delete(`/${ServerRoutes.WORKOUTS}/${workoutId}`);
 };
 
-export {getAllByUser, createNewWorkout, planWorkout, deleteWorkout};
+export {getUserWorkouts, createNewWorkout, planWorkout, deleteWorkout};

@@ -90,7 +90,7 @@ router.get('/', authMiddleware, postsController.getAll.bind(postsController));
 router.get(
   '/:id',
   authMiddleware,
-  postsController.getById.bind(postsController)
+  postsController.getPostById.bind(postsController)
 );
 
 /**

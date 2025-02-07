@@ -1,4 +1,4 @@
-import {FC, memo, useCallback, useEffect, useMemo, useState} from 'react';
+import {memo, useCallback, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {
@@ -12,14 +12,10 @@ import {Typography} from '@mui/joy';
 import {UserAvatar} from '@components/UserAvatar';
 import {ContentCard} from '@components/common/ContentCard';
 import {StyledIconButton} from '@components/common/StyledIconButton';
-import {UserSkeleton} from '@components/common/UserSkeleton';
 import {Post} from '@customTypes/Post';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {useUserContext} from '@contexts/UserContext';
-import {useFetch} from '@hooks/useFetch';
-import {getCommentCount} from '@services/commentsApi';
 import {handleLike} from '@services/postsApi';
-import {getUserById} from '@services/usersApi';
 import {formatDate} from '@utils/dateUtils';
 import styles from './styles.module.scss';
 
@@ -29,40 +25,32 @@ interface Props {
   onDeleteClick?: (postId: string) => void;
 }
 
-const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
+const PostItem = memo<Props>(({post, onEditClick, onDeleteClick}) => {
   const navigate = useNavigate();
   const {user} = useUserContext();
-  const [commentCount, setCommentCount] = useState(0);
-  const [likeCount, setLikeCount] = useState(post.likes.length);
-  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [post.userId]);
-  const [isLiked, setIsLiked] = useState(user ? post.likes.includes(user._id) : false);
-
-  useEffect(() => {
-    const fetchCommentCount = async () => {
-      try {
-        const response = await getCommentCount(post._id);
-        setCommentCount(response);
-      } catch (error) {
-        console.error('Error fetching comment count', error);
-      }
-    };
-
-    fetchCommentCount();
-  });
+  const [likes, setLikes] = useState(post.likes);
 
   const handleLikeButton = async () => {
-    try {
-      await handleLike(post._id);
-      setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
-      setIsLiked(!isLiked);
-    } catch (error) {
-      toast.error(`we couldn't handle your like in the post`);
+    if (user) {
+      try {
+        await handleLike(post._id);
+
+        if (isLiked) {
+          setLikes(prevState => prevState.filter(id => id !== user._id));
+        } else {
+          setLikes(prevState => [...prevState, user._id]);
+        }
+      } catch (error) {
+        toast.error(`We couldn't handle your like in the post`);
+      }
     }
   };
 
+  const isLiked = useMemo(() => (user ? likes.includes(user._id) : false), [likes, user]);
+
   const onCommentsButtonClick = useCallback(() => {
-    navigate(ClientRoutes.COMMENTS, {state: {post}});
-  }, [post._id, navigate]);
+    navigate(`${ClientRoutes.POST}/${post._id}${ClientRoutes.COMMENTS}`);
+  }, [navigate, post._id]);
 
   const onEditButtonClick = useCallback(() => {
     onEditClick?.(post);
@@ -76,19 +64,15 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
     <ContentCard>
       <div className={styles.container}>
         <div className={post.imageUrl ? styles.detailsContentWithImage : styles.detailsContent}>
-          {isFetchingUser || !creatingUser ? (
-            <UserSkeleton />
-          ) : (
-            <div className={styles.header}>
-              <UserAvatar user={creatingUser} />
-              <div>
-                <Typography level="body-lg" fontWeight={700}>
-                  {`@${creatingUser.userName}`}
-                </Typography>
-                <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
-              </div>
+          <div className={styles.header}>
+            <UserAvatar user={post.user} />
+            <div>
+              <Typography level="body-lg" fontWeight={700}>
+                {`@${post.user.userName}`}
+              </Typography>
+              <Typography level="body-md">{formatDate(post.createdTime)}</Typography>
             </div>
-          )}
+          </div>
           <div className={styles.content}>
             <Typography level="body-lg" className={styles.text}>
               {post.content}
@@ -97,13 +81,13 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
           <div className={styles.actions}>
             <StyledIconButton onClick={handleLikeButton}>
               {isLiked ? <FavoriteRounded /> : <FavoriteBorderRounded />}
-              <Typography level="body-md">{likeCount}</Typography>
+              <Typography level="body-md">{likes.length}</Typography>
             </StyledIconButton>
             <StyledIconButton onClick={onCommentsButtonClick}>
               <ChatBubbleOutlineRounded />
-              <Typography level="body-md">{commentCount}</Typography>
+              <Typography level="body-md">{post.commentCount}</Typography>
             </StyledIconButton>
-            {onEditClick && onDeleteClick && user?._id === post.userId && (
+            {onEditClick && onDeleteClick && user?._id === post.user._id && (
               <>
                 <StyledIconButton onClick={onEditButtonClick}>
                   <EditNoteRounded />
@@ -123,5 +107,5 @@ const PostItem: FC<Props> = ({post, onEditClick, onDeleteClick}) => {
       </div>
     </ContentCard>
   );
-};
+});
 export {PostItem};

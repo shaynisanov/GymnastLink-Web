@@ -1,11 +1,17 @@
-interface Post {
-  _id: string;
+import {User} from '@customTypes/User';
+
+interface PostRequest {
   content: string;
   imageUrl: string | null;
   userId: string;
   createdTime: string;
-  likes: string[]
 }
 
-type PostRequest = Omit<Post, '_id'>;
+interface Post extends Omit<PostRequest, 'userId'> {
+  _id: string;
+  likes: string[];
+  user: User;
+  commentCount: number;
+}
+
 export type {Post, PostRequest};

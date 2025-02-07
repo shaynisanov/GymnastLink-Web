@@ -14,7 +14,7 @@ interface Props {
 }
 
 const CommentItem = memo<Props>(({comment}) => {
-  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, [comment.userId]);
+  const {data: creatingUser, isFetching: isFetchingUser} = useFetch(getUserById, comment.userId);
 
   return (
     <ContentCard>
