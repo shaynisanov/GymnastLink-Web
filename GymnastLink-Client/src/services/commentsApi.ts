@@ -18,16 +18,6 @@ const createNewComment = async (newComment: CommentRequest) => {
   return response.data;
 };
 
-const getCommentCount = async (postId: string) => {
-  const response = await axiosInstance.get(`/${ServerRoutes.COMMENTS}/count`, {
-    params: {
-      postId,
-    },
-  });
-
-  return response.data.count;
-};
-
 const deleteCommentsByPostId = async (postId: string) => {
   await axiosInstance.delete(`${ServerRoutes.COMMENTS}`, {
     params: {
@@ -36,4 +26,4 @@ const deleteCommentsByPostId = async (postId: string) => {
   });
 };
 
-export {getAllComments, createNewComment, getCommentCount, deleteCommentsByPostId};
+export {getAllComments, createNewComment, deleteCommentsByPostId};
