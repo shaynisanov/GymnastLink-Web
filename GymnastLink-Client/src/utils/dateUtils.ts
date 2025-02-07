@@ -19,6 +19,6 @@ const parseExpirationInDays = (expiration: string) => {
   }
 };
 
-const formatDate = (dateString?: string) => dateString ? format(dateString, 'MMMM dd, yyyy. HH:mm') : '';
+const formatDate = (dateString?: string) => (dateString ? format(dateString, 'MMMM dd, yyyy. HH:mm') : '');
 
 export {parseExpirationInDays, formatDate};

@@ -6,11 +6,11 @@ import {CssBaseline, ThemeProvider} from '@mui/joy';
 import {Layout} from '@components/Layout';
 import {ClientRoutes} from '@enums/clientRoutes';
 import {UserProvider} from '@contexts/UserContext';
+import Comments from '@pages/Comments';
 import Login from '@pages/Login';
 import Profile from '@pages/Profile';
 import Updates from '@pages/Updates';
 import Workouts from '@pages/Workouts';
-import Comments from '@pages/Comments';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 import '@styles/index.module.scss';
 import {theme} from './Theme';
@@ -36,5 +36,5 @@ createRoot(document.getElementById('root')!).render(
         </BrowserRouter>
       </ThemeProvider>
     </StrictMode>
-  </GoogleOAuthProvider>,
+  </GoogleOAuthProvider>
 );

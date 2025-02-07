@@ -20,12 +20,11 @@ const NavBar: FC = () => {
           <Typography level="h2">GymnastLink</Typography>
         </Link>
         <div className={styles.linksContainer}>
-          {menuItems.map((item) => (
+          {menuItems.map(item => (
             <Link
               key={item.route}
               to={item.route}
-              className={currentRoute === item.route ? styles.activePageText : styles.pageText}
-            >
+              className={currentRoute === item.route ? styles.activePageText : styles.pageText}>
               <Typography level="body-lg">{item.text}</Typography>
             </Link>
           ))}

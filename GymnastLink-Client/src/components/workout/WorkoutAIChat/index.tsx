@@ -1,9 +1,9 @@
 import {FC, useState} from 'react';
+import {toast} from 'react-toastify';
 import {Bolt} from '@mui/icons-material';
 import {StyledButton} from '@components/common/StyledButton';
 import {StyledTextArea} from '@components/common/input/StyledTextArea';
 import {useUserContext} from '@contexts/UserContext';
-import {toast} from 'react-toastify';
 import {useMutation} from '@hooks/useMutation';
 import styles from './styles.module.scss';
 
@@ -30,7 +30,7 @@ const WorkoutAIChat: FC<Props> = ({handlePlanWorkout}) => {
         await planWorkout(workoutDescription);
         setWorkoutDescription('');
       } catch (e) {
-        toast.error('We couldn\'t generate your workout');
+        toast.error("We couldn't generate your workout");
       }
     }
   };
@@ -40,15 +40,14 @@ const WorkoutAIChat: FC<Props> = ({handlePlanWorkout}) => {
       <StyledTextArea
         value={workoutDescription}
         placeholder={PLACEHOLDER}
-        onChange={(e) => setWorkoutDescription(e.target.value)}
+        onChange={e => setWorkoutDescription(e.target.value)}
       />
       <StyledButton
         className={styles.generateButton}
         startDecorator={<Bolt />}
         loading={isPlanningWorkout}
         onClick={handleGenerateClick}
-        disabled={!isValid}
-      >
+        disabled={!isValid}>
         Generate Workout
       </StyledButton>
     </div>

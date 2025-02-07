@@ -1,7 +1,7 @@
 import {memo} from 'react';
 import {Skeleton} from '@mui/joy';
-import {UserSkeleton} from '@components/common/UserSkeleton';
 import {ContentCard} from '@components/common/ContentCard';
+import {UserSkeleton} from '@components/common/UserSkeleton';
 import styles from './styles.module.scss';
 
 const PostItemSkeleton = memo(() => (

@@ -52,12 +52,12 @@ const Comments: FC = () => {
           createdTime: new Date().toISOString(),
         });
         setComments(prevState => [newComment, ...prevState]);
-        setPost(prevState => prevState ? ({...prevState, commentCount: prevState.commentCount + 1}) : undefined);
+        setPost(prevState => (prevState ? {...prevState, commentCount: prevState.commentCount + 1} : undefined));
 
         setCommentContent('');
         toast.success('Comment was added');
       } catch (e) {
-        toast.error('We couldn\'t add your new comment');
+        toast.error("We couldn't add your new comment");
       }
     }
   };

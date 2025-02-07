@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
+  config => {
     const accessToken = Cookies.get('access_token');
 
     if (accessToken && config.url !== `/${ServerRoutes.AUTH}/logout`) {
@@ -20,16 +20,16 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
+  response => {
     return response;
   },
-  async (error) => {
+  async error => {
     const originalRequest = error.config;
 
     if (error.response.status === 401 && !originalRequest._retry) {

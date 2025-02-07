@@ -9,10 +9,10 @@ const getAllPosts = async () => {
 };
 
 const getUserPosts = async (userId?: string) => {
-    const response = await axiosInstance.get<Post[]>(`/${ServerRoutes.POSTS}`, {params: userId});
+  const response = await axiosInstance.get<Post[]>(`/${ServerRoutes.POSTS}`, {params: userId});
 
-    return response.data;
-}
+  return response.data;
+};
 
 const getPostById = async (postId: string) => {
   const response = await axiosInstance.get<Post>(`/${ServerRoutes.POSTS}/${postId}`);

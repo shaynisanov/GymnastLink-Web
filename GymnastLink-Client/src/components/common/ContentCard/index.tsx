@@ -13,7 +13,10 @@ interface Props extends PropsWithChildren {
   onClick?: () => void;
 }
 
-const ContentCard = memo<Props>(({className, onClick, children}) =>
-  <CardStyle className={className} onClick={onClick}>{children}</CardStyle>);
+const ContentCard = memo<Props>(({className, onClick, children}) => (
+  <CardStyle className={className} onClick={onClick}>
+    {children}
+  </CardStyle>
+));
 
 export {ContentCard};
