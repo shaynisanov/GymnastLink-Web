@@ -32,7 +32,6 @@ const EditUsernamePopup: FC<Props> = ({open, onSubmit, onClose}) => {
     <Popup
       open={open}
       title="Edit Username"
-      acceptText="Update"
       acceptAction={
         <StyledButton onClick={handleSubmit} disabled={!isNewUsernameValid} startDecorator={<CheckRounded />}>
           Update
