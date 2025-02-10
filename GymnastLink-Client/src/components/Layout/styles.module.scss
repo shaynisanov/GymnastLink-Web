@@ -1,3 +1,7 @@
+@import '@fontsource/cairo/index.css';
+@use "../../styles/index.module";
+
 .contentContainer {
   padding: 16px;
+  font-family: 'Cairo', Calibri, sans-serif;
 }
