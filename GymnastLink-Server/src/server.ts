@@ -21,6 +21,7 @@ app.use(json({limit: '50mb'}));
 app.use(cors());
 app.use(urlencoded({extended: true}));
 app.use(express.static('public'));
+app.use(express.static('front'));
 app.use('/posts', postRouter);
 app.use('/comments', commentRouter);
 app.use('/auth', authRouter);

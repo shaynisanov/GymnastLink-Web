@@ -14,6 +14,12 @@ const swaggerConfig = {
       {
         url: "http://localhost:3000",
       },
+      {
+        url: "http://10.10.246.79",
+      },
+      {
+        url: "https://10.10.246.79",
+      },
     ],
   },
   apis: ["./src/routes/*.ts"],
