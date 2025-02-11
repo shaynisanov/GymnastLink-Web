@@ -23,6 +23,9 @@ const swaggerConfig = {
       {
         url: "https://193.106.55.240",
       },
+      {
+        url: "https://node79.cs.colman.ac.il",
+      },
     ],
   },
   apis: ["./src/routes/*.ts"],
