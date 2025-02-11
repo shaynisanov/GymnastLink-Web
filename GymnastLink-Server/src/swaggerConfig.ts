@@ -20,6 +20,9 @@ const swaggerConfig = {
       {
         url: "https://10.10.246.79",
       },
+      {
+        url: "https://193.106.55.240",
+      },
     ],
   },
   apis: ["./src/routes/*.ts"],
