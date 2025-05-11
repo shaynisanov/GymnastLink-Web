@@ -10,5 +10,6 @@
     "resolveJsonModule": true
   },
   "lib": ["es2015"],
+  "include": ["src"], 
   "exclude": ["./src/tests", "node_modules"]
 }
